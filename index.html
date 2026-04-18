@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>changelog — mission feather</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="icon" type="image/png" href="https://em-content.zobj.net/source/microsoft/379/crocodile_1f40a.png">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-thumb { background: #222; }
+
+body {
+  background: #000;
+  color: #fff;
+  font-family: 'kangge', monospace;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── SCAN LINE OVERLAY ── */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 9999;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.012) 2px, rgba(255,255,255,0.012) 4px);
+  animation: scanmove 8s linear infinite;
+}
+@keyframes scanmove { from{background-position:0 0} to{background-position:0 100px} }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 20px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.4s, background 0.4s;
+}
+nav.scrolled {
+  border-color: #1a1a1a;
+  background: rgba(0,0,0,0.95);
+  backdrop-filter: blur(12px);
+}
+.nav-left {
+  font-size: 11px; letter-spacing: 0.12em;
+  color: #fff; display: flex; align-items: center; gap: 12px;
+}
+.live-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: #fff;
+  animation: ldpulse 2s ease-in-out infinite;
+}
+@keyframes ldpulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255, 255, 255, 0.4)} 50%{opacity:0.4;box-shadow:0 0 0 5px rgba(255,255,255,0)} }
+.nav-right { font-size: 10px; letter-spacing: 0.1em; color: #9f9f9f; }
+
+/* ── WRAP ── */
+.wrap { max-width: 680px; margin: 0 auto; padding: 0 32px; }
+
+/* ── HERO ── */
+.hero {
+  padding: 120px 0 72px;
+  border-bottom: 1px solid #1c1c1c;
+  animation: fadeUp 0.6s ease-out both;
+}
+.kicker {
+  font-size: 10px; letter-spacing: 0.2em; 
+  color: #444; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.kicker::before { content:''; width:20px; height:1px; background:#2a2a2a; }
+.hero h1 {
+  font-size: clamp(2.4rem, 7vw, 4rem);
+  font-weight: 700; line-height: 1.0; letter-spacing: -0.04em;
+  margin-bottom: 16px;
+}
+.hero h1 .dim { color: #5e5d5d; }
+.hero p { font-size: 11px; color: #444; line-height: 1.7; max-width: 360px; }
+
+/* ── BANNER ── */
+.banner {
+  padding: 32px 0;
+  border-bottom: 1px solid #111;
+  animation: fadeUp 0.6s ease-out 0.1s both;
+}
+.banner img {
+  width: 100%; border-radius: 6px;
+  border: 1px solid #111;
+  display: block;
+  transition: border-color 0.3s, transform 0.5s cubic-bezier(0.4,0,0.2,1), filter 0.3s;
+  filter: brightness(0.88);
+}
+.banner img:hover {
+  border-color: #2a2a2a;
+  transform: scale(1.012) translateY(-2px);
+  filter: brightness(1);
+}
+
+/* ── LOG HEADER ── */
+.log-head {
+  padding: 44px 0 28px;
+  display: flex; align-items: baseline; justify-content: space-between;
+  border-bottom: 1px solid #111;
+  animation: fadeUp 0.6s ease-out 0.15s both;
+}
+.log-ver { font-size: 11px; letter-spacing: 0.1em;  }
+.log-dt { font-size: 10px; color: #444; }
+
+/* ── ENTRIES ── */
+.entry {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  gap: 0 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid #0d0d0d;
+  opacity: 0; transform: translateX(-8px);
+  transition: opacity 0.45s ease-out, transform 0.45s ease-out, border-color 0.2s;
+}
+.entry.visible { opacity: 1; transform: translateX(0); }
+.entry:hover { border-color: #1a1a1a; }
+
+.etag {
+  font-size: 9px; letter-spacing: 0.08em; 
+  color: #ababab; padding-top: 2px; font-weight: 700;
+  transition: color 0.2s;
+}
+.entry:hover .etag { color: #555; }
+
+.etitle {
+  font-size: 12px; font-weight: 700; color: #bbb;
+  margin-bottom: 5px; line-height: 1.35;
+  transition: color 0.2s;
+}
+.entry:hover .etitle { color: #eee; }
+.edesc { font-size: 11px; color: #c8c8c8; line-height: 1.65; }
+
+.entry:nth-child(1){transition-delay:0.05s}
+.entry:nth-child(2){transition-delay:0.10s}
+.entry:nth-child(3){transition-delay:0.15s}
+.entry:nth-child(4){transition-delay:0.20s}
+.entry:nth-child(5){transition-delay:0.25s}
+.entry:nth-child(6){transition-delay:0.30s}
+.entry:nth-child(7){transition-delay:0.35s}
+
+/* ── PRESENCE ── */
+.presence-wrap {
+  border-top: 1px solid #111;
+  padding: 48px 0 96px;
+}
+.plabel {
+  font-size: 10px; letter-spacing: 0.15em; 
+  color: #cecece; margin-bottom: 28px;
+  display: flex; align-items: center; gap: 10px;
+  animation: fadeUp 0.6s ease-out both;
+}
+.plabel::before { content:''; width:18px; height:1px; background:#2a2a2a; }
+
+.pcard {
+  padding: 18px 0;
+  border-bottom: 1px solid #0d0d0d;
+  opacity: 0; transform: translateY(8px);
+  transition: opacity 0.45s ease-out, transform 0.45s ease-out;
+}
+.pcard.visible { opacity: 1; transform: translateY(0); }
+.pcard:nth-child(2){transition-delay:0.05s}
+.pcard:nth-child(3){transition-delay:0.1s}
+.pcard:nth-child(4){transition-delay:0.15s}
+
+.user { display: flex; align-items: flex-start; gap: 12px; }
+.avatar-wrap { position: relative; flex-shrink: 0; width: 38px; height: 38px; }
+.avatar { width: 100%; height: 100%; border-radius: 50%; background: #0f0f0f; object-fit: cover; z-index: 1; position: relative; border: 1px solid #1a1a1a; }
+.avatar-decoration { position: absolute; top: -10%; left: -10%; width: 120%; height: 120%; pointer-events: none; z-index: 2; display: none; }
+.sdot { position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; border-radius: 50%; border: 2px solid #000; z-index: 3; transition: background 0.5s; }
+.sdot.online { background: #23a559; }
+.sdot.idle { background: #faa61a; }
+.sdot.dnd { background: #ed4245; }
+.sdot.offline { background: #2a2a2a; }
+
+.right { flex: 1; min-width: 0; }
+.name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.uname { font-size: 12px; font-weight: 700; color: #aaa; display: flex; align-items: center; gap: 5px; }
+
+.clan-tag {
+  font-size: 9px; font-weight: 700; color: #888;
+  background: rgba(255,255,255,0.04); border: 1px solid #1a1a1a;
+  padding: 0 6px; height: 16px; border-radius: 20px;
+  display: inline-flex; align-items: center; gap: 3px;
+  vertical-align: middle; margin-left: 3px;
+}
+.clan-icon { width: 11px; height: 11px; object-fit: contain; }
+
+.platforms { display: flex; gap: 5px; }
+.plat-icon { color: #333; display: flex; align-items: center; position: relative; cursor: default; }
+.plat-icon svg { width: 11px; height: 11px; stroke-width: 2.5; }
+.plat-icon::after {
+  content: attr(data-label);
+  position: absolute; bottom: 100%; left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  background: #111; color: #888; padding: 3px 8px;
+  font-size: 9px; border-radius: 3px; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: all 0.2s;
+  border: 1px solid #1a1a1a; z-index: 10;
+}
+.plat-icon:hover::after { opacity: 1; transform: translateX(-50%) translateY(-8px); }
+
+.activities { display: flex; flex-direction: column; gap: 0; }
+.act-card { padding: 7px 0; font-size: 11px; border-top: 1px solid #0d0d0d; margin-top: 4px; }
+.act-title { font-weight: 700; color: #666; display: block; margin-bottom: 1px; }
+.act-sub { color: #2e2e2e; display: block; line-height: 1.4; }
+.act-time { font-size: 10px; color: #222; margin-top: 5px; display: block; font-variant-numeric: tabular-nums; }
+.progress-bg { width: 100%; height: 2px; background: #111; border-radius: 1px; margin-top: 6px; }
+.progress-fill { height: 100%; background: #1db954; border-radius: 1px; width: 0%; transition: width 1s linear; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid #111; padding: 24px 32px;
+  max-width: 680px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.fl { font-size: 10px; color: #222; letter-spacing: 0.08em; }
+.fr { font-size: 10px; color: #1a1a1a; }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+
+@media(max-width:600px){
+  nav{padding:18px 20px}
+  .wrap{padding:0 20px}
+  .hero{padding:96px 0 56px}
+  footer{padding:20px}
+  .entry{grid-template-columns:56px 1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <section class="hero">
+    <div class="kicker">update log</div>
+    <h1>what's<br><span class="dim">new.</span></h1>
+    <p>feathers biggest update yet - including a full rebrand.</p>
+  </section>
+
+  <div class="banner">
+    <img src="https://i.ibb.co/gLgBt68q/New-Project-7.png" alt="Mission Feather">
+  </div>
+
+  <div class="log-head">
+    <span class="log-ver">v2.0.0 — major release</span>
+    <span class="log-dt">2026</span>
+  </div>
+
+  <div id="logBody">
+    <div class="entry">
+      <span class="etag">new</span>
+      <div><div class="etitle">Heist Cooldown Tracker</div><div class="edesc">Per-user cooldown state tracked with precision timers. Visual countdown, visible from discord, with added protection to stop you accidentally resetting timers.</div></div>
+    </div>
+    <div class="entry">
+      <span class="etag">revamp</span>
+      <div><div class="etitle">Heist Server Finder</div><div class="edesc">Complete rebuild. Faster scans, smarter filtering, reduced false positives. Results filtered to reach your needs.</div></div>
+    </div>
+    <div class="entry">
+      <span class="etag">new</span>
+      <div><div class="etitle">Party Finder</div><div class="edesc">Find and join active heist lobbies in real time. Limited uses brings community members closer.</div></div>
+    </div>
+    <div class="entry">
+      <span class="etag">improve</span>
+      <div><div class="etitle">Updated Embeds</div><div class="edesc">Nicer looking, easier to understand embeds. Updating live on every interaction</div></div>
+    </div>
+    <div class="entry">
+      <span class="etag">fix</span>
+      <div><div class="etitle">Spam Prevention Cooldowns</div><div class="edesc">Features now have built in spam preventions, ensuring you don't flood channels</div></div>
+    </div>
+    <div class="entry">
+      <span class="etag">perf</span>
+      <div><div class="etitle">More Accurate Server Finding</div><div class="edesc">Filters more servers, and offers you more options to choose from. Perfect for finding your perfect server.</div></div>
+    </div>
+    <div class="entry">
+      <span class="etag">limit</span>
+      <div><div class="etitle">Global Rate-Limit Protection</div><div class="edesc">2 second delay added accross all "externally" functioning Feather V2 features. Barely noticeable, but makes a huge difference</div></div>
+    </div>
+  </div>
+
+  <!-- PRESENCE -->
+  <div class="presence-wrap">
+    <div class="plabel">developer(s):</div>
+
+    <div class="pcard" id="u1w">
+      <div class="user">
+        <div class="avatar-wrap"><img class="avatar-decoration" id="dec-u1" src=""><img class="avatar" id="pfp-u1" src=""><div class="sdot offline" id="dot-u1"></div></div>
+        <div class="right"><div class="name-row"><div class="uname" id="name-u1">—</div><div class="platforms" id="plat-u1"></div></div><div class="activities" id="acts-u1"></div></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <span class="fr">nwsfuz · 2026</span>
+</footer>
+
+<script>
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.06 });
+document.querySelectorAll('.entry, .pcard').forEach(el => io.observe(el));
+
+const USERS = [
+  { id: '817410231088578610', slot: 'u1' },
+  { id: '1457057307631554776', slot: 'u2' },
+  { id: '1491511108933255178', slot: 'u3' }
+];
+
+function getAvatar(id, hash) {
+  if (!hash) return 'https://cdn.discordapp.com/embed/avatars/0.png';
+  return `https://cdn.discordapp.com/avatars/${id}/${hash}.${hash.startsWith('a_')?'gif':'webp'}?size=128`;
+}
+function fmt(ms) {
+  const s=Math.floor(ms/1000),m=Math.floor(s/60),h=Math.floor(m/60);
+  return h>0?`${h}h ${m%60}m ${s%60}s`:`${m}:${(s%60).toString().padStart(2,'0')}`;
+}
+
+function renderUser(slot, data) {
+  const u = data.discord_user;
+  document.getElementById(`pfp-${slot}`).src = getAvatar(u.id, u.avatar);
+  const dec = document.getElementById(`dec-${slot}`);
+  if (u.avatar_decoration_data?.asset) { dec.src=`https://cdn.discordapp.com/avatar-decoration-presets/${u.avatar_decoration_data.asset}.png?size=128`; dec.style.display='block'; }
+  else dec.style.display='none';
+
+  const nameEl = document.getElementById(`name-${slot}`);
+  let html = u.global_name || u.username;
+  if (u.primary_guild?.tag) {
+    const g=u.primary_guild;
+    const icon=g.badge?`<img class="clan-icon" src="https://cdn.discordapp.com/guild-tag-badges/${g.identity_guild_id}/${g.badge}.png">`:g.icon?`<img class="clan-icon" src="https://cdn.discordapp.com/icons/${g.id}/${g.icon}.webp?size=32">`:'';
+    html+=` <span class="clan-tag">${icon}${g.tag}</span>`;
+  }
+  nameEl.innerHTML = html;
+
+  document.getElementById(`dot-${slot}`).className=`sdot ${(data.discord_status||'offline').toLowerCase()}`;
+
+  const platEl=document.getElementById(`plat-${slot}`); platEl.innerHTML='';
+  [['active_on_discord_desktop','monitor','Desktop'],['active_on_discord_mobile','smartphone','Mobile'],['active_on_discord_web','globe','Browser']].forEach(([key,icon,label])=>{
+    if(data[key]){const s=document.createElement('span');s.className='plat-icon';s.setAttribute('data-label',label);s.innerHTML=`<i data-lucide="${icon}"></i>`;platEl.appendChild(s);}
+  });
+  lucide.createIcons();
+
+  const actsEl=document.getElementById(`acts-${slot}`); actsEl.innerHTML='';
+  (data.activities||[]).forEach((act,idx)=>{
+    if(act.type===4&&!act.state&&!act.emoji)return;
+    const card=document.createElement('div'); card.className='act-card';
+    if(act.type===4){
+      const emoji=act.emoji?(act.emoji.id?`<img src="https://cdn.discordapp.com/emojis/${act.emoji.id}.webp?size=16" style="width:13px;vertical-align:middle;margin-right:3px;">`:act.emoji.name+' '):'';
+      card.innerHTML=`<span class="act-sub">${emoji}${act.state||''}</span>`;
+    } else {
+      let time='';
+      if(act.name==='Spotify'&&data.spotify){const{start,end}=data.spotify.timestamps;time=`<div class="act-time" data-spotify-start="${start}" data-spotify-end="${end}">0:00 / 0:00</div><div class="progress-bg"><div class="progress-fill" id="spot-bar-${slot}-${idx}"></div></div>`;}
+      else if(act.timestamps?.start)time=`<div class="act-time" data-start="${act.timestamps.start}">0:00 elapsed</div>`;
+      card.innerHTML=`<span class="act-title">${act.name==='Hang Status'?'In Voice':act.name}</span><span class="act-sub">${act.details||act.state||''}</span>${time}`;
+    }
+    actsEl.appendChild(card);
+  });
+}
+
+setInterval(()=>{
+  const now=Date.now();
+  document.querySelectorAll('[data-start]').forEach(el=>el.textContent=`${fmt(now-+el.dataset.start)} elapsed`);
+  document.querySelectorAll('[data-spotify-start]').forEach(el=>{
+    const start=+el.dataset.spotifyStart,end=+el.dataset.spotifyEnd,total=end-start;
+    const prog=Math.max(0,Math.min(total,now-start));
+    el.textContent=`${fmt(prog)} / ${fmt(total)}`;
+    const bar=el.nextElementSibling?.querySelector('.progress-fill');
+    if(bar)bar.style.width=(prog/total*100)+'%';
+  });
+},1000);
+
+function connect(id,slot){
+  let ws,hb;
+  function start(){
+    ws=new WebSocket('wss://api.lanyard.rest/socket');
+    ws.onmessage=e=>{
+      const m=JSON.parse(e.data);
+      if(m.op===1){hb=setInterval(()=>ws.send(JSON.stringify({op:3})),m.d.heartbeat_interval);ws.send(JSON.stringify({op:2,d:{subscribe_to_ids:[id]}}));}
+      if(m.op===0&&m.d){const p=m.t==='INIT_STATE'?(m.d[id]||m.d):m.d;if(p)renderUser(slot,p);}
+    };
+    ws.onclose=()=>{clearInterval(hb);setTimeout(start,5000);};
+  }
+  start();
+}
+USERS.forEach(({id,slot})=>connect(id,slot));
+document.addEventListener('DOMContentLoaded',()=>lucide.createIcons());
+</script>
+</body>
+</html>
