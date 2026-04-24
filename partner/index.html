@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nws — partners</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            color: white;
+            display: flex;
+            flex-direction: column; /* Vertical stack */
+            justify-content: center; 
+            align-items: center;    
+            text-align: center;
+        }
+
+        .content {
+            font-family: 'Kangge', sans-serif;
+            font-size: 1rem;
+            max-width: 80%;
+            line-height: 1.6;
+            margin-bottom: 40px; /* Space above the icon */
+        }
+        .header {
+            font-family: 'Kangge', sans-serif;
+            font-size: 1.1rem;
+            max-width: 80%;
+            line-height: 1.6;
+            margin-bottom: 40px; /* Space above the icon */
+        }
+
+        .back-link {
+            color: white;
+            text-decoration: none;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0.7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+            transform: scale(1.1); /* Subtle grow effect */
+        }
+
+        /* Styling the Lucide icon size */
+        .lucide {
+            width: 32px;
+            height: 32px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        Partnership Deprecation
+    </div> 
+    <div class="content">
+        Partners were removed in the interest of public safety. After discussing with PSD, and other external groups (which are official within Buckingham Palace), I was told that all servers listed provide a risk to people, as if one server has an outbreak (someone goes rogue), everyone in that server is placed at risk. Therefore, we removed most partners and only kept a few, as we can guarantee their moderation team will keep users safe.
+    </div>
+
+    <a href="https://nwsz.github.io/feather" class="back-link" aria-label="Go back">
+        <i data-lucide="arrow-left"></i>
+    </a>
+
+    <script>
+        /* This renders the icons onto the page */
+        lucide.createIcons();
+    </script>
+
+</body>
+</html>
