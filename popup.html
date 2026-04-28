@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feather</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:wght@300;400;500&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:         #0c0c0f;
+      --surface:    #111115;
+      --surface2:   #16161b;
+      --border:     rgba(255,255,255,0.07);
+      --border2:    rgba(255,255,255,0.04);
+      --text:       #e8e8ec;
+      --muted:      rgba(232,232,236,0.38);
+      --muted2:     rgba(232,232,236,0.22);
+      --green:      #72c39d;
+      --green-dim:  rgba(114,195,157,0.12);
+      --green-glow: rgba(114,195,157,0.22);
+      --red:        #e07070;
+      --red-dim:    rgba(224,112,112,0.1);
+      --amber:      #e0b870;
+      --amber-dim:  rgba(224,184,112,0.1);
+      --blue:       #7098e0;
+      --blue-dim:   rgba(112,152,224,0.1);
+    }
+
+    html, body {
+      width: 320px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow: hidden;
+    }
+
+    .popup { display: flex; flex-direction: column; min-height: 100%; }
+
+    /* ── Header ─────────────────────────────────────────────────────────── */
+    .header {
+      padding: 16px 18px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-left { display: flex; align-items: center; gap: 9px; }
+    .logo-mark {
+      width: 28px; height: 28px;
+      background: var(--green-dim);
+      border: 1px solid rgba(114,195,157,0.22);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--green); flex-shrink: 0;
+    }
+    .logo-text { display: flex; flex-direction: column; line-height: 1.2; }
+    .logo-name {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px; font-weight: 500;
+      letter-spacing: 0.08em; color: var(--text);
+    }
+    .logo-sub { font-size: 10px; color: var(--muted); font-weight: 300; letter-spacing: 0.04em; }
+    .header-status {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 10px; font-family: 'DM Mono', monospace;
+      letter-spacing: 0.06em; color: var(--muted);
+    }
+    .status-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--muted);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+    .status-dot.live {
+      background: var(--green);
+      box-shadow: 0 0 6px var(--green-glow);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+    .status-dot.paused { background: rgba(255,255,255,0.15); }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+    /* ── Tab bar ─────────────────────────────────────────────────────────── */
+    .tab-bar {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      padding: 0 18px;
+      gap: 2px;
+    }
+    .tab-btn {
+      background: none; border: none; cursor: pointer;
+      font-family: 'DM Mono', monospace;
+      font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--muted2);
+      padding: 9px 10px 8px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .tab-btn:hover { color: var(--muted); }
+    .tab-btn.active { color: var(--green); border-bottom-color: var(--green); }
+
+    /* ── Tab panels ─────────────────────────────────────────────────────── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Count block ─────────────────────────────────────────────────────── */
+    .count-block {
+      padding: 20px 18px 16px;
+      display: flex; align-items: flex-end;
+      justify-content: space-between; gap: 12px;
+    }
+    .count-main { display: flex; flex-direction: column; gap: 4px; }
+    .count-number {
+      font-family: 'DM Mono', monospace;
+      font-size: 40px; font-weight: 300; line-height: 1;
+      color: var(--text); letter-spacing: -0.02em;
+      transition: color 0.3s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .count-number.has-messages { color: var(--green); }
+    .count-number.bump { transform: scale(1.08); }
+    .count-label { font-size: 11px; color: var(--muted); font-weight: 300; letter-spacing: 0.05em; }
+
+    .count-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+    .toggle-row { display: flex; align-items: center; gap: 8px; }
+    .toggle-label { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
+    .toggle {
+      position: relative; width: 36px; height: 20px;
+      cursor: pointer; flex-shrink: 0;
+    }
+    .toggle input { position: absolute; opacity: 0; width: 0; height: 0; }
+    .toggle-track {
+      position: absolute; inset: 0;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    .toggle-thumb {
+      position: absolute; top: 3px; left: 3px;
+      width: 12px; height: 12px;
+      background: rgba(255,255,255,0.35);
+      border-radius: 50%;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), background 0.3s ease;
+    }
+    .toggle input:checked ~ .toggle-track {
+      background: var(--green-dim);
+      border-color: rgba(114,195,157,0.3);
+    }
+    .toggle input:checked ~ .toggle-thumb {
+      transform: translateX(16px); background: var(--green);
+    }
+
+    .btn-reset {
+      background: none; border: 1px solid var(--border); border-radius: 6px;
+      color: var(--muted); font-family: 'DM Mono', monospace;
+      font-size: 9px; letter-spacing: 0.08em; padding: 5px 10px;
+      cursor: pointer; text-transform: uppercase;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .btn-reset:hover {
+      color: var(--text); border-color: rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.04);
+    }
+
+    /* ── Stats row ───────────────────────────────────────────────────────── */
+    .stats-row {
+      display: flex; gap: 1px;
+      margin: 0 18px 16px;
+      border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+    }
+    .stat-cell {
+      flex: 1; padding: 8px 10px;
+      background: var(--surface);
+      display: flex; flex-direction: column; gap: 2px;
+      border-right: 1px solid var(--border);
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-val {
+      font-family: 'DM Mono', monospace;
+      font-size: 14px; font-weight: 400; color: var(--text); line-height: 1;
+    }
+    .stat-key { font-size: 9px; color: var(--muted2); letter-spacing: 0.05em; text-transform: uppercase; }
+
+    /* ── Info section ────────────────────────────────────────────────────── */
+    .divider { height: 1px; background: var(--border); margin: 0 18px; }
+
+    .info-section { padding: 14px 18px; display: flex; flex-direction: column; gap: 9px; }
+    .info-row { display: flex; align-items: center; justify-content: space-between; }
+    .info-key { font-size: 11px; color: var(--muted); font-weight: 300; letter-spacing: 0.04em; }
+    .info-val {
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border); border-radius: 4px;
+      padding: 2px 7px; letter-spacing: 0.06em;
+    }
+    .info-val.green { color: var(--green); background: var(--green-dim); border-color: rgba(114,195,157,0.2); }
+    .info-val.red   { color: var(--red);   background: var(--red-dim);   border-color: rgba(224,112,112,0.2); }
+
+    /* ── Recent messages log ─────────────────────────────────────────────── */
+    .log-panel { padding: 12px 18px; }
+    .log-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .log-title { font-size: 10px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; font-family: 'DM Mono', monospace; }
+    .log-clear-btn {
+      background: none; border: none; cursor: pointer;
+      font-family: 'DM Mono', monospace; font-size: 9px;
+      color: var(--muted2); letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 3px 6px; border-radius: 4px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .log-clear-btn:hover { color: var(--red); background: var(--red-dim); }
+
+    .log-list {
+      display: flex; flex-direction: column; gap: 6px;
+      max-height: 220px; overflow-y: auto;
+    }
+    .log-list::-webkit-scrollbar { width: 3px; }
+    .log-list::-webkit-scrollbar-track { background: transparent; }
+    .log-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+    .log-item {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 9px 11px;
+      display: flex; flex-direction: column; gap: 4px;
+      animation: log-in 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    @keyframes log-in {
+      from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+      to   { opacity: 1; transform: none; }
+    }
+    .log-item-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .log-author {
+      font-family: 'DM Mono', monospace; font-size: 10px;
+      color: var(--green); letter-spacing: 0.04em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 140px;
+    }
+    .log-meta { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .log-channel {
+      font-size: 9px; color: var(--blue);
+      background: var(--blue-dim); border: 1px solid rgba(112,152,224,0.15);
+      border-radius: 4px; padding: 1px 5px;
+      font-family: 'DM Mono', monospace; letter-spacing: 0.04em;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 80px;
+    }
+    .log-time {
+      font-size: 9px; color: var(--muted2);
+      font-family: 'DM Mono', monospace; letter-spacing: 0.04em; flex-shrink: 0;
+    }
+    .log-content {
+      font-size: 11px; color: var(--muted);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+      max-width: 100%;
+    }
+    .log-empty {
+      text-align: center; padding: 24px 0;
+      font-size: 11px; color: var(--muted2); letter-spacing: 0.04em;
+    }
+
+    /* ── Settings panel ──────────────────────────────────────────────────── */
+    .settings-panel { padding: 14px 18px; display: flex; flex-direction: column; gap: 12px; }
+    .setting-group { display: flex; flex-direction: column; gap: 6px; }
+    .setting-label {
+      font-size: 10px; color: var(--muted); letter-spacing: 0.05em;
+      text-transform: uppercase; font-family: 'DM Mono', monospace;
+    }
+    .setting-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 10px;
+      background: var(--surface); border: 1px solid var(--border2);
+      border-radius: 8px;
+    }
+    .setting-key { font-size: 11px; color: var(--muted); }
+    .setting-val { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(255,255,255,0.5); }
+
+    /* ── Footer ──────────────────────────────────────────────────────────── */
+    .footer {
+      padding: 9px 18px 12px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .footer-note { font-size: 9px; color: rgba(255,255,255,0.18); font-family: 'DM Mono', monospace; letter-spacing: 0.06em; }
+    .discord-pill {
+      display: flex; align-items: center; gap: 4px;
+      font-size: 9px; color: rgba(255,255,255,0.2);
+      font-family: 'DM Mono', monospace; letter-spacing: 0.05em;
+    }
+    .discord-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: rgba(255,255,255,0.12); transition: background 0.3s ease;
+    }
+    .discord-dot.connected { background: var(--green); box-shadow: 0 0 5px var(--green-glow); }
+
+    /* ── No discord tab warning ──────────────────────────────────────────── */
+    .no-tab-banner {
+      margin: 0 18px 12px;
+      padding: 9px 12px;
+      background: var(--red-dim); border: 1px solid rgba(224,112,112,0.18);
+      border-radius: 8px; font-size: 10px; color: var(--red);
+      letter-spacing: 0.03em; display: none;
+    }
+    .no-tab-banner.visible { display: block; }
+
+    /* ── Supabase status ─────────────────────────────────────────────────── */
+    .db-status-row { display: flex; align-items: center; gap: 5px; }
+    .db-dot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--amber); box-shadow: 0 0 5px rgba(224,184,112,0.4);
+    }
+    .db-dot.ok { background: var(--green); box-shadow: 0 0 5px var(--green-glow); }
+    .db-dot.err { background: var(--red); box-shadow: 0 0 5px rgba(224,112,112,0.4); }
+    .db-label { font-size: 9px; color: var(--muted2); font-family: 'DM Mono', monospace; letter-spacing: 0.04em; }
+  </style>
+</head>
+<body>
+<div class="popup">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-left">
+      <div class="logo-mark">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="16" y1="8" x2="2" y2="22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          <line x1="17.5" y1="15" x2="9" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="logo-text">
+        <span class="logo-name">feather</span>
+        <span class="logo-sub">discord observer</span>
+      </div>
+    </div>
+    <div class="header-status">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">idle</span>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="overview">Overview</button>
+    <button class="tab-btn" data-tab="log">Log</button>
+    <button class="tab-btn" data-tab="settings">Settings</button>
+  </div>
+
+  <!-- ── OVERVIEW TAB ─────────────────────────────────────────────────── -->
+  <div class="tab-panel active" id="tab-overview">
+
+    <!-- No Discord tab warning -->
+    <div class="no-tab-banner" id="noTabBanner">
+      No active Discord tab detected.
+    </div>
+
+    <!-- Count + Controls -->
+    <div class="count-block">
+      <div class="count-main">
+        <div class="count-number" id="countNumber">0</div>
+        <div class="count-label">messages detected</div>
+      </div>
+      <div class="count-actions">
+        <div class="toggle-row">
+          <span class="toggle-label">active</span>
+          <label class="toggle">
+            <input type="checkbox" id="toggleInput" />
+            <div class="toggle-track"></div>
+            <div class="toggle-thumb"></div>
+          </label>
+        </div>
+        <button class="btn-reset" id="resetBtn">clear</button>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-cell">
+        <span class="stat-val" id="statSession">0</span>
+        <span class="stat-key">session</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-val" id="statAuthors">—</span>
+        <span class="stat-key">authors</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-val" id="statChannel">—</span>
+        <span class="stat-key">channel</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Info -->
+    <div class="info-section">
+      <div class="info-row">
+        <span class="info-key">status</span>
+        <span class="info-val" id="statusBadge">idle</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">webhook</span>
+        <span class="info-val" id="webhookBadge">—</span>
+      </div>
+      <div class="info-row">
+        <span class="info-key">database</span>
+        <div class="db-status-row">
+          <div class="db-dot" id="dbDot"></div>
+          <span class="db-label" id="dbLabel">not configured</span>
+        </div>
+      </div>
+      <div class="info-row">
+        <span class="info-key">shortcut</span>
+        <span class="info-val">alt + q</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── LOG TAB ──────────────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-log">
+    <div class="log-panel">
+      <div class="log-header">
+        <span class="log-title">Recent Messages</span>
+        <button class="log-clear-btn" id="logClearBtn">clear all</button>
+      </div>
+      <div class="log-list" id="logList">
+        <div class="log-empty">No messages yet.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SETTINGS TAB ─────────────────────────────────────────────────── -->
+  <div class="tab-panel" id="tab-settings">
+    <div class="settings-panel">
+      <div class="setting-group">
+        <span class="setting-label">Extension</span>
+        <div class="setting-row">
+          <span class="setting-key">Version</span>
+          <span class="setting-val">1.0.0</span>
+        </div>
+        <div class="setting-row">
+          <span class="setting-key">Scope</span>
+          <span class="setting-val">all channels</span>
+        </div>
+        <div class="setting-row">
+          <span class="setting-key">Keyboard toggle</span>
+          <span class="setting-val">alt + q</span>
+        </div>
+      </div>
+      <div class="setting-group">
+        <span class="setting-label">Integrations</span>
+        <div class="setting-row">
+          <span class="setting-key">Webhook</span>
+          <span class="setting-val" id="settingsWebhookStatus">—</span>
+        </div>
+        <div class="setting-row">
+          <span class="setting-key">Supabase</span>
+          <span class="setting-val" id="settingsDbStatus">—</span>
+        </div>
+      </div>
+      <div class="setting-group">
+        <span class="setting-label">Data</span>
+        <div class="setting-row" style="cursor:pointer" id="exportBtn">
+          <span class="setting-key">Export log as JSON</span>
+          <span class="setting-val">↓</span>
+        </div>
+        <div class="setting-row" style="cursor:pointer" id="fullResetBtn">
+          <span class="setting-key" style="color:var(--red)">Full reset</span>
+          <span class="setting-val" style="color:var(--red)">×</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <span class="footer-note">feather © 2025</span>
+    <div class="discord-pill">
+      <div class="discord-dot" id="discordDot"></div>
+      <span id="discordTabText">discord.com</span>
+    </div>
+  </div>
+
+</div>
+<script src="popup.js"></script>
+</body>
+</html>
