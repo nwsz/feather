@@ -1,8 +1,9 @@
 # [Feather](https://nwsz.github.io/feather/docs)
 
-> Whisper-light Discord message notifications — with Supabase logging and webhook alerts. Thanks to claude for the readme lol. 
+> Whisper-light Discord message notifications — with Supabase logging and webhook alerts. Thanks to claude for the readme lol.
+> Read the open source documentation at https://nwsz.github.io/feather/docs for indepth install and setup guides!
 
-Feather is a private Chrome extension that sits on top of Discord and detects new incoming messages in real time. It shows a minimal overlay indicator on the Discord page, pops up a clean dashboard with message history and stats, fires Discord webhook alerts with author and message preview, and logs everything to a Supabase database.
+Feather is a free, local, Chrome extension that sits on top of Discord and detects new incoming messages in real time. It shows a minimal overlay indicator on the Discord page, pops up a clean dashboard with message history and stats, fires Discord webhook alerts with author and message preview, and logs everything to a Supabase database.  Useful for tracking messages sent in channels or servers that you cannot add bots to. It's also undetectable to any other user, so unless you tell them, they will never know you're using it to track them 🤫
 
 ---
 
