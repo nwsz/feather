@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Feather — Docs</title>
+<title>feather</title>
 <link rel="icon" type="image/webp" href="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:1920/plain/https://attic.sh/v9vxj9nb0kj2hccj2lcam39wfx6a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -483,14 +483,15 @@ hr{border:none;border-top:1px solid var(--line);margin:36px 0;}
     <p>Every time you change any file, you must: go to <code>chrome://extensions</code>, find the Feather card, click the <strong>↺ refresh icon</strong>, then reload the Discord tab. Chrome does not auto-reload unpacked extensions.</p>
   </div>
 
-  <!-- MACOS -->
+  <section>
   <div class="os-panel" id="os-mac">
     <div class="steps">
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-body">
           <div class="step-title">Put all files in one folder</div>
-          <div class="step-desc">Create a permanent folder — e.g. <code>~/Documents/feather/</code>. Place all six files and the <code>icons/</code> subfolder inside. Don't move it after loading.</div>        </div>
+          <div class="step-desc">Create a permanent folder — e.g. <code>~/Documents/feather/</code>. Place all six files and the <code>icons/</code> subfolder inside. Don't move it after loading.</div>
+        </div>
       </div>
       <div class="step">
         <div class="step-num">2</div>
@@ -510,9 +511,7 @@ hr{border:none;border-top:1px solid var(--line);margin:36px 0;}
         <div class="step-body">
           <div class="step-title">Enable Developer mode</div>
           <div class="step-desc">Toggle <strong>Developer mode</strong> on in the top-right corner of the page.</div>
-
-      </div>
-      <div class="step">
+        </div> </div> <div class="step">
         <div class="step-num">5</div>
         <div class="step-body">
           <div class="step-title">Click "Load unpacked"</div>
@@ -523,24 +522,24 @@ hr{border:none;border-top:1px solid var(--line);margin:36px 0;}
         <div class="step-num">6</div>
         <div class="step-body">
           <div class="step-title">Pin and verify</div>
-          <div class="step-desc">Pin Feather from the 🧩 menu. Open <a href="https://discord.com/app" target="_blank">discord.com/app</a> — the overlay should appear bottom-right within a few seconds.</div>        </div>
+          <div class="step-desc">Pin Feather from the 🧩 menu. Open <a href="https://discord.com/app" target="_blank">discord.com/app</a> — the overlay should appear bottom-right within a few seconds.</div>
+        </div>
       </div>
     </div>
     <div class="callout tip">
       <span class="callout-icon">💡</span>
-      <div class="callout-body"><strong>Quick reload shortcut</strong>On macOS you can hit <kbd>⌘ R</kbd> on the Discord tab after reloading the extension at <code>chrome://extensions</code>.</div>
+      <div class="callout-body"><strong>Quick reload shortcut</strong>: On macOS you can hit <kbd>⌘ R</kbd> on the Discord tab after reloading the extension at <code>chrome://extensions</code>.</div>
     </div>
   </div>
 
-  <!-- LINUX -->
-  <div class="os-panel" id="os-linux">
+  <hr> <div class="os-panel" id="os-linux">
     <div class="steps">
       <div class="step">
         <div class="step-num">1</div>
         <div class="step-body">
           <div class="step-title">Put all files in one directory</div>
           <div class="step-desc">Pick a permanent path — e.g. <code>~/.local/share/feather/</code>. Copy all files and the <code>icons/</code> subdirectory there.</div>
-<pre><button class="copy-btn" onclick="cp(this)">copy</button>mkdir -p ~/.local/share/feather
+          <pre><button class="copy-btn" onclick="cp(this)">copy</button>mkdir -p ~/.local/share/feather
 cp -r /path/to/downloaded/feather/* ~/.local/share/feather/</pre>
         </div>
       </div>
@@ -549,7 +548,7 @@ cp -r /path/to/downloaded/feather/* ~/.local/share/feather/</pre>
         <div class="step-body">
           <div class="step-title">Add your credentials</div>
           <div class="step-desc">Edit <code>background.js</code> with your favourite editor:</div>
-<pre><button class="copy-btn" onclick="cp(this)">copy</button>nano ~/.local/share/feather/background.js
+          <pre><button class="copy-btn" onclick="cp(this)">copy</button>nano ~/.local/share/feather/background.js
 <span class="cm"># or: code, vim, gedit — whatever you prefer</span></pre>
         </div>
       </div>
@@ -565,9 +564,7 @@ cp -r /path/to/downloaded/feather/* ~/.local/share/feather/</pre>
         <div class="step-body">
           <div class="step-title">Enable Developer mode + Load unpacked</div>
           <div class="step-desc">Toggle Developer mode, click <strong>Load unpacked</strong>, navigate to <code>~/.local/share/feather/</code>, click <strong>Open</strong>.</div>
-          <
-        </div>
-      </div>
+        </div> </div>
       <div class="step">
         <div class="step-num">5</div>
         <div class="step-body">
@@ -578,7 +575,7 @@ cp -r /path/to/downloaded/feather/* ~/.local/share/feather/</pre>
     </div>
     <div class="callout warn">
       <span class="callout-icon">⚠️</span>
-      <div class="callout-body"><strong>Snap Chrome on Linux</strong>If Chrome was installed via Snap, it sandboxes filesystem access. If Load Unpacked fails to see your folder, move the extension to <code>~/snap/chromium/current/feather/</code> or install Chrome via the official <code>.deb</code> package instead.</div>
+      <div class="callout-body"><strong>Snap Chrome on Linux</strong>: If Chrome was installed via Snap, it sandboxes filesystem access. If Load Unpacked fails to see your folder, move the extension to <code>~/snap/chromium/current/feather/</code> or install Chrome via the official <code>.deb</code> package instead.</div>
     </div>
   </div>
 </section>
