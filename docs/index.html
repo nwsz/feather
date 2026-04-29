@@ -4,623 +4,1098 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Feather — Docs</title>
-
+<link rel="icon" type="image/webp" href="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:1920/plain/https://attic.sh/v9vxj9nb0kj2hccj2lcam39wfx6a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet">
 
+
+<meta name="title" content="Feather | Discord Tracking Extension">
+<meta name="description" content="A lightweight, privacy-focused Chrome extension for tracking Discord activity and statistics.">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://github.com/nwsz/feather">
+<meta property="og:title" content="Feather">
+<meta property="og:description" content="A lightweight discord tracking chrome extension. Simple, fast, and open-source.">
+<meta property="og:image" content="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:1920/plain/https://attic.sh/v9vxj9nb0kj2hccj2lcam39wfx6a">
+
+<meta property="twitter:card" content="summary">
+<meta property="twitter:url" content="https://github.com/nwsz/feather">
+<meta property="twitter:title" content="Feather">
+<meta property="twitter:description" content="A lightweight discord tracking chrome extension.">
+<meta property="twitter:image" content="https://imgproxy.attic.sh/insecure/f:webp/q:90/w:1920/plain/https://attic.sh/v9vxj9nb0kj2hccj2lcam39wfx6a">
+
+<meta name="theme-color" content="#5865F2">
 <style>
-*,
-*::before,
-*::after{
-box-sizing:border-box;
-margin:0;
-padding:0;
-}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 
 :root{
---bg:#fafafa;
---panel:#ffffff;
---text:#111111;
---muted:#666666;
---line:#e6e6e6;
---soft:#f4f4f4;
---black:#000000;
-
---header-h:58px;
---sidebar-w:250px;
---radius:14px;
+  --bg:#fafafa;
+  --panel:#ffffff;
+  --text:#111111;
+  --muted:#666666;
+  --line:#e6e6e6;
+  --soft:#f4f4f4;
+  --black:#000000;
+  --green:#1a6e42;
+  --green-bg:#eef8f3;
+  --green-border:#b8dfc8;
+  --amber:#7a5200;
+  --amber-bg:#fffbee;
+  --amber-border:#e8d090;
+  --red:#b91c1c;
+  --red-bg:#fff5f5;
+  --red-border:#f5c0c0;
+  --blue:#1a3f8a;
+  --blue-bg:#f0f4ff;
+  --blue-border:#c0d0f5;
+  --header-h:58px;
+  --sidebar-w:248px;
+  --radius:12px;
 }
 
-html{
-scroll-behavior:smooth;
-font-size:15px;
-}
+html{scroll-behavior:smooth;font-size:15px;}
+body{font-family:'Geist',sans-serif;background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden;}
 
-body{
-font-family:'Geist',sans-serif;
-background:var(--bg);
-color:var(--text);
-line-height:1.65;
-overflow-x:hidden;
-}
-
-/* HEADER */
+/* ── HEADER ── */
 header{
-position:fixed;
-top:0;
-left:0;
-right:0;
-height:var(--header-h);
-background:rgba(255,255,255,.88);
-backdrop-filter:blur(14px);
--webkit-backdrop-filter:blur(14px);
-border-bottom:1px solid var(--line);
-display:flex;
-align-items:center;
-padding:0 18px;
-z-index:1000;
-gap:12px;
+  position:fixed;top:0;left:0;right:0;height:var(--header-h);
+  background:rgba(255,255,255,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 18px;z-index:1000;gap:12px;
 }
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;font-weight:500;letter-spacing:.08em;}
+.logo-box{width:30px;height:30px;border-radius:9px;background:#000;display:grid;place-items:center;color:#fff;flex-shrink:0;}
+.hdr-badge{font-family:'DM Mono',monospace;font-size:10px;padding:3px 9px;border-radius:999px;background:var(--soft);color:#555;}
+.spacer{flex:1;}
+.version{font-family:'DM Mono',monospace;font-size:11px;color:#999;}
+.menu-btn{display:none;background:none;border:none;cursor:pointer;padding:6px;border-radius:8px;color:var(--text);transition:.15s;}
+.menu-btn:hover{background:var(--soft);}
 
-.logo{
-display:flex;
-align-items:center;
-gap:10px;
-text-decoration:none;
-color:var(--text);
-font-family:'DM Mono',monospace;
-font-size:13px;
-font-weight:500;
-letter-spacing:.08em;
-}
+/* ── LAYOUT ── */
+.layout{display:flex;padding-top:var(--header-h);min-height:100vh;}
 
-.logo-box{
-width:30px;
-height:30px;
-border-radius:9px;
-background:#000;
-display:grid;
-place-items:center;
-color:#fff;
-font-size:13px;
-flex-shrink:0;
-}
-
-.badge{
-font-family:'DM Mono',monospace;
-font-size:10px;
-padding:3px 8px;
-border-radius:999px;
-background:var(--soft);
-color:#555;
-}
-
-.spacer{
-flex:1;
-}
-
-.version{
-font-family:'DM Mono',monospace;
-font-size:11px;
-color:#777;
-}
-
-/* LAYOUT */
-.layout{
-display:flex;
-padding-top:var(--header-h);
-min-height:100vh;
-}
-
-/* SIDEBAR */
+/* ── SIDEBAR ── */
 .sidebar{
-width:var(--sidebar-w);
-position:fixed;
-top:var(--header-h);
-left:0;
-bottom:0;
-overflow-y:auto;
-background:var(--panel);
-border-right:1px solid var(--line);
-padding:18px 0 40px;
+  width:var(--sidebar-w);position:fixed;top:var(--header-h);left:0;bottom:0;
+  overflow-y:auto;background:var(--panel);border-right:1px solid var(--line);padding:20px 0 48px;
+  transition:transform .26s cubic-bezier(.4,0,.2,1);
 }
+.sidebar::-webkit-scrollbar{width:3px;}
+.sidebar::-webkit-scrollbar-thumb{background:#ddd;border-radius:999px;}
 
-.sidebar::-webkit-scrollbar{
-width:4px;
-}
-
-.sidebar::-webkit-scrollbar-thumb{
-background:#ddd;
-border-radius:999px;
-}
-
-.group{
-margin-bottom:24px;
-}
-
-.group-label{
-display:block;
-padding:0 18px 10px;
-font-size:10px;
-font-family:'DM Mono',monospace;
-letter-spacing:.12em;
-text-transform:uppercase;
-color:#8b8b8b;
-}
-
+.nav-group{margin-bottom:26px;}
+.nav-label{display:block;padding:0 16px 9px;font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#999;}
 .nav-btn{
-width:100%;
-background:none;
-border:none;
-padding:10px 18px;
-display:flex;
-align-items:center;
-gap:10px;
-cursor:pointer;
-font-size:14px;
-font-family:'Geist',sans-serif;
-color:#555;
-text-align:left;
-border-left:2px solid transparent;
-transition:.18s ease;
+  width:100%;background:none;border:none;padding:9px 16px;display:flex;align-items:center;gap:9px;
+  cursor:pointer;font-size:13.5px;font-family:'Geist',sans-serif;color:#666;text-align:left;
+  border-left:2px solid transparent;transition:.15s ease;
 }
+.nav-btn:hover{background:#f7f7f7;color:#000;}
+.nav-btn.active{background:#f4f4f4;color:#000;border-left-color:#000;font-weight:600;}
+.nav-icon{width:15px;height:15px;opacity:.45;flex-shrink:0;}
+.nav-btn:hover .nav-icon,.nav-btn.active .nav-icon{opacity:.85;}
 
-.nav-btn:hover{
-background:#f7f7f7;
-color:#000;
-}
+/* ── MAIN ── */
+main{margin-left:var(--sidebar-w);width:100%;padding:46px 56px 96px;max-width:calc(var(--sidebar-w) + 820px);}
 
-.nav-btn.active{
-background:#f7f7f7;
-color:#000;
-border-left-color:#000;
-font-weight:600;
-}
+.section{display:none;animation:fadein .22s ease;}
+.section.active{display:block;}
+@keyframes fadein{from{opacity:0;transform:translateY(7px);}to{opacity:1;transform:none;}}
 
-/* CONTENT */
-main{
-margin-left:var(--sidebar-w);
-width:100%;
-max-width:900px;
-padding:42px 52px 80px;
-}
+/* ── TYPOGRAPHY ── */
+.eyebrow{font-size:11px;font-family:'DM Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#888;margin-bottom:12px;}
+h1{font-family:'Instrument Serif',serif;font-size:46px;line-height:1.07;font-weight:400;margin-bottom:16px;letter-spacing:-.02em;}
+h1 em{font-style:italic;color:#aaa;}
+.lead{font-size:15.5px;color:#555;max-width:640px;line-height:1.75;margin-bottom:32px;padding-bottom:28px;border-bottom:1px solid var(--line);}
+h2{font-family:'Instrument Serif',serif;font-size:28px;font-weight:400;margin:44px 0 14px;letter-spacing:-.01em;}
+h3{font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:#222;margin:28px 0 10px;}
+p{font-size:14px;color:#555;margin-bottom:14px;line-height:1.75;}
+p:last-child{margin-bottom:0;}
+strong{color:#111;font-weight:500;}
+a{color:#000;text-decoration:underline;text-underline-offset:3px;}
 
-.section{
-display:none;
-animation:fade .22s ease;
-}
+/* ── CALLOUT ── */
+.callout{border-radius:10px;padding:14px 17px;margin:18px 0;font-size:13.5px;display:flex;gap:12px;align-items:flex-start;line-height:1.65;}
+.callout-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.callout-body{flex:1;color:#555;}
+.callout-body strong{display:block;margin-bottom:3px;}
+.callout.tip{background:var(--green-bg);border:1px solid var(--green-border);}
+.callout.tip .callout-body strong{color:var(--green);}
+.callout.note{background:var(--blue-bg);border:1px solid var(--blue-border);}
+.callout.note .callout-body strong{color:var(--blue);}
+.callout.warn{background:var(--amber-bg);border:1px solid var(--amber-border);}
+.callout.warn .callout-body strong{color:var(--amber);}
+.callout.danger{background:var(--red-bg);border:1px solid var(--red-border);}
+.callout.danger .callout-body strong{color:var(--red);}
 
-.section.active{
-display:block;
-}
-
-@keyframes fade{
-from{opacity:0;transform:translateY(8px);}
-to{opacity:1;transform:none;}
-}
-
-.eyebrow{
-font-size:11px;
-font-family:'DM Mono',monospace;
-letter-spacing:.12em;
-text-transform:uppercase;
-color:#777;
-margin-bottom:12px;
-}
-
-h1{
-font-family:'Instrument Serif',serif;
-font-size:48px;
-line-height:1.05;
-font-weight:400;
-margin-bottom:14px;
-letter-spacing:-.02em;
-}
-
-h1 em{
-font-style:italic;
-color:#999;
-}
-
-.lead{
-font-size:16px;
-color:#555;
-max-width:680px;
-line-height:1.75;
-margin-bottom:34px;
-padding-bottom:28px;
-border-bottom:1px solid var(--line);
-}
-
-h2{
-font-family:'Instrument Serif',serif;
-font-size:30px;
-font-weight:400;
-margin:40px 0 14px;
-}
-
-p{
-font-size:14px;
-color:#555;
-margin-bottom:14px;
-}
-
-/* CARDS */
-.grid{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:14px;
-margin-top:22px;
-}
-
-.card{
-background:var(--panel);
-border:1px solid var(--line);
-border-radius:var(--radius);
-padding:18px;
-transition:.18s ease;
-}
-
-.card:hover{
-transform:translateY(-2px);
-box-shadow:0 10px 24px rgba(0,0,0,.05);
-}
-
-.card strong{
-display:block;
-margin-bottom:6px;
-font-size:14px;
-color:#000;
-}
-
-.card span{
-font-size:13px;
-color:#666;
-line-height:1.6;
-}
-
-/* CODE */
+/* ── CODE ── */
 pre{
-background:#0c0c0c;
-color:#f2f2f2;
-padding:18px;
-border-radius:14px;
-overflow:auto;
-font-size:12px;
-font-family:'DM Mono',monospace;
-line-height:1.8;
-margin:16px 0;
+  position:relative;background:#0d0d0d;color:#e8e8e8;
+  padding:20px 22px;border-radius:var(--radius);overflow-x:auto;
+  font-size:12.5px;font-family:'DM Mono',monospace;line-height:1.8;margin:16px 0;
 }
+.copy-btn{
+  position:absolute;top:12px;right:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  border-radius:6px;color:#aaa;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;
+  padding:4px 10px;cursor:pointer;transition:.15s;
+}
+.copy-btn:hover{background:rgba(255,255,255,.16);color:#fff;}
+.copy-btn.ok{color:#7ddba8;border-color:rgba(125,219,168,.3);}
+code{font-family:'DM Mono',monospace;font-size:12.5px;background:#f0f0f0;border:1px solid #e4e4e4;border-radius:5px;padding:1px 6px;color:#000;}
 
-/* MOBILE NAV */
-.mobile-toggle{
-display:none;
-background:none;
-border:none;
-font-size:20px;
-cursor:pointer;
-}
+/* syntax */
+.cm{color:#555;}
+.ck{color:#a5c8e8;}
+.cv{color:#98e0b0;}
+.cs{color:#f0b870;}
+.kw{color:#c8a8f0;}
+.fn{color:#80c8e0;}
 
-/* MOBILE */
-@media (max-width:900px){
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.5px;}
+.tbl th{text-align:left;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#999;font-weight:400;padding:8px 14px;border-bottom:2px solid var(--line);}
+.tbl td{padding:10px 14px;border-bottom:1px solid var(--line);color:#555;vertical-align:top;line-height:1.6;}
+.tbl td:first-child{color:#000;font-family:'DM Mono',monospace;font-size:12px;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:#fafafa;}
 
-main{
-padding:32px 20px 70px;
-margin-left:0;
-max-width:none;
-}
+/* ── FEATURE CARDS ── */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin:22px 0;}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:20px;transition:.18s;}
+.card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.06);}
+.card-icon{font-size:22px;margin-bottom:10px;}
+.card strong{display:block;margin-bottom:5px;font-size:14px;color:#000;}
+.card span{font-size:13px;color:#666;line-height:1.6;}
 
-.sidebar{
-position:fixed;
-left:-100%;
-width:82%;
-max-width:320px;
-transition:left .25s ease;
-z-index:999;
-box-shadow:18px 0 40px rgba(0,0,0,.08);
-}
+/* ── STEPS ── */
+.steps{margin:22px 0;}
+.step{display:flex;gap:20px;padding:20px 0;border-bottom:1px solid var(--line);}
+.step:last-child{border-bottom:none;}
+.step-num{font-family:'Instrument Serif',serif;font-size:30px;color:#ddd;line-height:1;flex-shrink:0;width:32px;text-align:center;margin-top:1px;transition:.2s;}
+.step:hover .step-num{color:#000;}
+.step-body{flex:1;}
+.step-title{font-size:14.5px;font-weight:600;color:#000;margin-bottom:6px;}
+.step-desc{font-size:13.5px;color:#555;line-height:1.7;}
 
-.sidebar.open{
-left:0;
+/* ── IMAGE SLOT ── */
+.img-slot{
+  border:2px dashed var(--line);border-radius:var(--radius);
+  background:#fafafa;margin:16px 0;padding:32px 20px;
+  text-align:center;color:#aaa;font-size:13px;font-family:'DM Mono',monospace;
+  letter-spacing:.04em;
 }
+.img-slot span{display:block;font-size:11px;margin-top:6px;color:#ccc;}
 
-.mobile-toggle{
-display:block;
+/* ── OS TABS ── */
+.os-tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin:20px 0 0;}
+.os-tab{
+  padding:9px 18px;font-size:12.5px;font-weight:500;color:#999;cursor:pointer;
+  border:none;background:none;font-family:'Geist',sans-serif;
+  border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:.15s;display:flex;align-items:center;gap:7px;
 }
+.os-tab:hover{color:#000;}
+.os-tab.active{color:#000;border-bottom-color:#000;font-weight:600;}
+.os-panel{display:none;}
+.os-panel.active{display:block;animation:fadein .2s ease;}
 
-.grid{
-grid-template-columns:1fr;
-}
+/* ── INLINE BADGE ── */
+.pill{display:inline-flex;align-items:center;gap:4px;font-family:'DM Mono',monospace;font-size:11px;padding:2px 9px;border-radius:999px;font-weight:500;vertical-align:middle;}
+.pill.green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-border);}
+.pill.grey{background:#f0f0f0;color:#888;border:1px solid #e0e0e0;}
+.pill.red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-border);}
 
-h1{
-font-size:38px;
-}
+/* ── KBD ── */
+kbd{display:inline-block;font-family:'DM Mono',monospace;font-size:11.5px;color:#111;background:#fff;border:1px solid #ccc;border-bottom:2px solid #bbb;border-radius:5px;padding:3px 10px;box-shadow:0 1px 2px rgba(0,0,0,.06);}
 
-.lead{
-font-size:15px;
-}
+/* ── FILE TREE ── */
+.file-tree{background:#0d0d0d;color:#e8e8e8;border-radius:var(--radius);padding:20px 22px;font-family:'DM Mono',monospace;font-size:12.5px;line-height:2;margin:16px 0;}
+.file-tree .dir{color:#a5c8e8;}
+.file-tree .cmt{color:#555;}
 
-.overlay{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.22);
-backdrop-filter:blur(2px);
-z-index:998;
-display:none;
-}
+/* ── DIVIDER ── */
+hr{border:none;border-top:1px solid var(--line);margin:36px 0;}
 
-.overlay.show{
-display:block;
-}
-}
+/* ── DISCORD MOCK ── */
+.discord-preview{background:#313338;border-radius:var(--radius);padding:0;overflow:hidden;margin:20px 0;font-family:'gg sans','Noto Sans',sans-serif;}
+.discord-preview-bar{background:#1e1f22;padding:10px 16px;display:flex;align-items:center;gap:8px;}
+.discord-preview-bar span{font-size:12px;color:#80848e;font-family:'DM Mono',monospace;letter-spacing:.04em;}
+.discord-dot{width:6px;height:6px;border-radius:50%;background:#ed4245;}
+.discord-dot.y{background:#fee75c;}
+.discord-dot.g{background:#57f287;}
+.discord-msg-area{padding:16px;}
+.discord-msg{display:flex;gap:12px;margin-bottom:12px;}
+.discord-msg:last-child{margin-bottom:0;}
+.discord-avatar{width:38px;height:38px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-weight:700;font-size:14px;color:#fff;}
+.discord-msg-body{}
+.discord-msg-header{display:flex;align-items:baseline;gap:8px;margin-bottom:3px;}
+.discord-msg-name{font-size:15px;font-weight:600;color:#fff;}
+.discord-msg-time{font-size:11px;color:#80848e;}
+.discord-msg-text{font-size:15px;color:#dbdee1;line-height:1.5;}
+.discord-msg-text strong{color:#fff;}
+.discord-msg-text .mention{color:#c9d8ff;background:rgba(88,101,242,.3);padding:0 2px;border-radius:3px;}
+.discord-embed{margin-top:8px;border-left:4px solid #5865f2;background:#2b2d31;border-radius:4px;padding:10px 14px;max-width:440px;}
+.discord-embed-title{font-size:14px;font-weight:600;color:#fff;margin-bottom:6px;}
+.discord-embed-field{margin-top:8px;}
+.discord-embed-field-name{font-size:11px;font-weight:700;color:#b8b9be;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;}
+.discord-embed-field-val{font-size:14px;color:#dbdee1;}
+.discord-embed-footer{margin-top:10px;font-size:11px;color:#80848e;display:flex;align-items:center;gap:5px;}
 
-/* SMALL */
-@media (max-width:520px){
-h1{
-font-size:32px;
+/* ── STORAGE KEY TABLE ── */
+.key-row{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);align-items:flex-start;}
+.key-row:last-child{border-bottom:none;}
+.key-name{font-family:'DM Mono',monospace;font-size:12px;color:#000;flex-shrink:0;width:180px;padding-top:2px;}
+.key-type{font-family:'DM Mono',monospace;font-size:11px;color:#888;flex-shrink:0;width:70px;padding-top:3px;}
+.key-desc{font-size:13.5px;color:#555;line-height:1.65;}
+
+/* ── PROGRESS BAR ── */
+.progress-bar{position:fixed;top:var(--header-h);left:0;right:0;height:2px;background:var(--line);z-index:999;}
+.progress-fill{height:100%;background:#000;width:0;transition:width .05s linear;}
+
+/* ── OVERLAY ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.25);backdrop-filter:blur(3px);z-index:998;display:none;opacity:0;transition:opacity .25s;}
+.overlay.show{display:block;opacity:1;}
+
+/* ── MOBILE ── */
+@media(max-width:900px){
+  .menu-btn{display:flex;align-items:center;justify-content:center;}
+  .sidebar{transform:translateX(-100%);z-index:999;box-shadow:20px 0 48px rgba(0,0,0,.1);}
+  .sidebar.open{transform:translateX(0);}
+  main{margin-left:0;padding:32px 22px 80px;}
+  h1{font-size:36px;}
+  .lead{font-size:15px;}
+  .grid{grid-template-columns:1fr;}
 }
-header{
-padding:0 14px;
-}
+@media(max-width:520px){
+  h1{font-size:30px;}
+  header{padding:0 14px;}
+  pre{font-size:11.5px;padding:16px;}
 }
 </style>
 </head>
-
 <body>
 
+<div class="progress-bar"><div class="progress-fill" id="prog"></div></div>
+
 <header>
-<button class="mobile-toggle" onclick="toggleMenu()">☰</button>
-
-<a href="#" class="logo" onclick="showSection('overview');return false;">
-<div class="logo-box">F</div>
-feather
-</a>
-
-<span class="badge">docs</span>
-
-<div class="spacer"></div>
-
-<div class="version">v1.1.0</div>
+  <button class="menu-btn" onclick="toggleSidebar()" aria-label="Menu">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="3.5" width="16" height="1.5" rx=".75" fill="currentColor"/><rect x="1" y="8.25" width="16" height="1.5" rx=".75" fill="currentColor"/><rect x="1" y="13" width="16" height="1.5" rx=".75" fill="currentColor"/></svg>
+  </button>
+  <a href="#" class="logo" onclick="nav('overview');return false;">
+    <div class="logo-box">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><line x1="16" y1="8" x2="2" y2="22" stroke="white" stroke-width="2.2" stroke-linecap="round"/><line x1="17.5" y1="15" x2="9" y2="15" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>
+    </div>
+    feather
+  </a>
+  <span class="hdr-badge">docs</span>
+  <div class="spacer"></div>
+  <span class="version">v1.1.0</span>
 </header>
 
-<div class="overlay" id="overlay" onclick="toggleMenu(false)"></div>
+<div class="overlay" id="overlay" onclick="toggleSidebar(false)"></div>
 
 <div class="layout">
 
+<!-- SIDEBAR -->
 <nav class="sidebar" id="sidebar">
-
-<div class="group">
-<span class="group-label">Getting Started</span>
-
-<button class="nav-btn active" data-tab="overview" onclick="showSection('overview')">Overview</button>
-<button class="nav-btn" data-tab="install" onclick="showSection('install')">Installation</button>
-<button class="nav-btn" data-tab="config" onclick="showSection('config')">Configuration</button>
-</div>
-
-<div class="group">
-<span class="group-label">Integrations</span>
-
-<button class="nav-btn" data-tab="webhook" onclick="showSection('webhook')">Webhook</button>
-<button class="nav-btn" data-tab="supabase" onclick="showSection('supabase')">Supabase</button>
-</div>
-
-<div class="group">
-<span class="group-label">Reference</span>
-
-<button class="nav-btn" data-tab="popup" onclick="showSection('popup')">Popup UI</button>
-<button class="nav-btn" data-tab="logic" onclick="showSection('logic')">Detection Logic</button>
-<button class="nav-btn" data-tab="trouble" onclick="showSection('trouble')">Troubleshooting</button>
-</div>
-
+  <div class="nav-group">
+    <span class="nav-label">Getting Started</span>
+    <button class="nav-btn active" data-tab="overview" onclick="nav('overview')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 3h12v2H2zm0 4h12v2H2zm0 4h7v2H2z"/></svg>Overview
+    </button>
+    <button class="nav-btn" data-tab="install" onclick="nav('install')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1v8.586l2.293-2.293 1.414 1.414L8 12.414l-3.707-3.707 1.414-1.414L8 9.586V1zM2 14h12v1H2z"/></svg>Installation
+    </button>
+    <button class="nav-btn" data-tab="config" onclick="nav('config')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M7.5 10.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm0-1.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/><path d="M13.7 9.1l.8-.5.5-1.6-1.3-1.3-1.6.5-.5-.8L10.3 4 9 4.5l-.5-.8L6.9 3.4 5.6 4.7l.5 1.6-.8.5L4.6 8l.5 1.6 1.3.3.5.8-.3 1.6 1.3 1.3 1.6-.5.5.8 1.6.3 1.3-1.3-.5-1.6.8-.5.3-1.7z"/></svg>Configuration
+    </button>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Integrations</span>
+    <button class="nav-btn" data-tab="webhook" onclick="nav('webhook')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><circle cx="3.5" cy="11.5" r="1.5"/><circle cx="12.5" cy="4.5" r="1.5"/><circle cx="8" cy="8" r="2"/><path d="M5.5 8.5 3.5 10M10.5 7.5l2-2" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>Webhook
+    </button>
+    <button class="nav-btn" data-tab="supabase" onclick="nav('supabase')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2h5v5H2zm7 0h5v5H9zM2 9h5v5H2zm7 2h2v2H9zm3 0h2v2h-2zm0-2h2v2h-2zm-3 0h2v2H9z"/></svg>Supabase
+    </button>
+  </div>
+  <div class="nav-group">
+    <span class="nav-label">Reference</span>
+    <button class="nav-btn" data-tab="popup" onclick="nav('popup')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="2" width="12" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>Popup UI
+    </button>
+    <button class="nav-btn" data-tab="logic" onclick="nav('logic')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="2"/><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>Detection Logic
+    </button>
+    <button class="nav-btn" data-tab="shortcuts" onclick="nav('shortcuts')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><rect x="1" y="4" width="4" height="3" rx="1"/><rect x="6" y="4" width="4" height="3" rx="1"/><rect x="11" y="4" width="4" height="3" rx="1"/><rect x="1" y="9" width="14" height="3" rx="1"/></svg>Shortcuts
+    </button>
+    <button class="nav-btn" data-tab="trouble" onclick="nav('trouble')">
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 11a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm1-4H7V4h2v4z"/></svg>Troubleshooting
+    </button>
+  </div>
 </nav>
 
 <main>
 
-<!-- OVERVIEW -->
+<!-- ─────────────────────────── OVERVIEW ─────────────────────────── -->
 <section class="section active" id="overview">
-<div class="eyebrow">Introduction</div>
-<h1>Feather <em>docs</em></h1>
-<p class="lead">
-A whisper-light Chrome extension that watches Discord for new messages and logs them with webhook alerts and Supabase storage.
-</p>
+  <div class="eyebrow">Introduction</div>
+  <h1>Feather <em>docs</em></h1>
+  <p class="lead">A whisper-light Chrome extension that watches Discord for new messages in real time — firing webhook alerts, logging everything to Supabase, and showing a clean overlay indicator right on the Discord page.</p>
 
-<div class="grid">
-<div class="card">
-<strong>Live Detection</strong>
-<span>MutationObserver watches Discord in real time.</span>
-</div>
+  <div class="grid">
+    <div class="card"><div class="card-icon">👁️</div><strong>Live Detection</strong><span>MutationObserver watches Discord's DOM. No polling, no API. New messages are caught the instant they appear.</span></div>
+    <div class="card"><div class="card-icon">🔔</div><strong>Webhook Alerts</strong><span>Posts to a Discord webhook with author name, channel, message preview, and running count — every single time.</span></div>
+    <div class="card"><div class="card-icon">🗄️</div><strong>Supabase Logging</strong><span>Every detected message is inserted as a row with full metadata. Permanent, queryable, yours.</span></div>
+    <div class="card"><div class="card-icon">🛡️</div><strong>Smart Suppression</strong><span>Two-layer system blocks false triggers when you switch channels — URL polling + burst detection.</span></div>
+    <div class="card"><div class="card-icon">🧹</div><strong>Deduplication</strong><span>Tracks message IDs so Discord's optimistic rendering never double-counts your own messages.</span></div>
+    <div class="card"><div class="card-icon">📊</div><strong>Popup Dashboard</strong><span>Three-tab UI with live stats, scrollable message log, JSON export, and full reset.</span></div>
+  </div>
 
-<div class="card">
-<strong>Webhook Alerts</strong>
-<span>Send clean Discord notifications instantly.</span>
-</div>
+  <h2>How the pieces connect</h2>
+  <p>Three scripts run independently and talk via Chrome's message passing API:</p>
+  <table class="tbl">
+    <thead><tr><th>Script</th><th>Runs in</th><th>Responsibility</th></tr></thead>
+    <tbody>
+      <tr><td>content.js</td><td>Discord tab</td><td>Watches DOM, detects messages, shows overlay, extracts metadata</td></tr>
+      <tr><td>background.js</td><td>Service worker</td><td>Receives events, fires webhook, writes to Supabase, relays popup commands</td></tr>
+      <tr><td>popup.js</td><td>Toolbar popup</td><td>Displays stats + log, sends toggle/reset commands, handles export</td></tr>
+    </tbody>
+  </table>
 
-<div class="card">
-<strong>Supabase Logging</strong>
-<span>Permanent searchable message storage.</span>
-</div>
-
-<div class="card">
-<strong>Smart Suppression</strong>
-<span>Blocks false triggers when switching channels.</span>
-</div>
-</div>
-
-<h2>Quick Start</h2>
-<pre>
-1. Load unpacked extension
-2. Open Discord
-3. Add webhook
-4. Add Supabase
-5. Start logging
-</pre>
+  <h2>File structure</h2>
+  <div class="file-tree">
+<span class="dir">feather/</span>
+├── manifest.json      <span class="cmt">— Chrome MV3 manifest, permissions, host rules</span>
+├── background.js      <span class="cmt">— Service worker: webhook + Supabase + tab relay</span>
+├── content.js         <span class="cmt">— Injected into Discord: observer + overlay</span>
+├── popup.html         <span class="cmt">— Popup markup and all inline styles</span>
+├── popup.js           <span class="cmt">— Popup logic: tabs, storage, live updates</span>
+├── styles.css         <span class="cmt">— Overlay indicator styles injected into Discord</span>
+└── <span class="dir">icons/</span>
+    ├── icon16.png
+    ├── icon48.png
+    └── icon128.png
+  </div>
 </section>
 
-<!-- INSTALL -->
+<!-- ─────────────────────────── INSTALL ─────────────────────────── -->
 <section class="section" id="install">
-<div class="eyebrow">Getting Started</div>
-<h1>Installation</h1>
-<p class="lead">
-Load Feather manually through Chrome extensions.
-</p>
+  <div class="eyebrow">Getting Started</div>
+  <h1>Installation</h1>
+  <p class="lead">Feather is a private unpacked extension — it never goes through the Chrome Web Store. You load it directly from your files. The process is the same in Chrome, Edge, Brave, and Arc.</p>
 
-<pre>
-chrome://extensions
+  <div class="callout note">
+    <span class="callout-icon">ℹ️</span>
+    <div class="callout-body"><strong>Before you start</strong>You need all six files plus the <code>icons/</code> folder in a single directory on your computer. Configure your credentials in <code>background.js</code> before loading — it's easier than reloading twice.</div>
+  </div>
 
-Enable Developer Mode
-Click Load Unpacked
-Select feather folder
-</pre>
+  <div class="os-tabs">
+    <button class="os-tab active" onclick="showOs('win')">🪟 Windows</button>
+    <button class="os-tab" onclick="showOs('mac')">🍎 macOS</button>
+    <button class="os-tab" onclick="showOs('linux')">🐧 Linux</button>
+  </div>
+
+  <!-- WINDOWS -->
+  <div class="os-panel active" id="os-win">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Put all files in one folder</div>
+          <div class="step-desc">Create a folder somewhere permanent — e.g. <code>C:\Users\you\feather\</code>. Place all six files and the <code>icons\</code> subfolder inside it. Don't move the folder after loading or the extension will break.</div>
+<div class="img-slot">
+  <img src="https://i.ibb.co/wNkJsCqz/Screenshot-2026-04-29-161504.png" alt="Image" style="border-radius: 15px;">
+</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Add your credentials to background.js</div>
+          <div class="step-desc">Open <code>background.js</code> in Notepad, VS Code, or any text editor. Fill in the three constants at the top — your webhook URL, Supabase URL, and Supabase anon key. Save the file. See <a href="#" onclick="nav('config');return false;">Configuration</a> for details.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Open Chrome Extensions</div>
+          <div class="step-desc">In Chrome's address bar, type <code>chrome://extensions</code> and press Enter.</div>
+
+<div class="img-slot">
+  <img src="https://i.ibb.co/CKM2bzWT/Screenshot-2026-04-29-162032.png" alt="Image" style="border-radius: 15px;">
+</div>
+
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Enable Developer mode</div>
+          <div class="step-desc">In the top-right corner of the extensions page, toggle <strong>Developer mode</strong> on. The page will refresh and show new buttons.</div>
+<div class="img-slot">
+  <img src="https://i.ibb.co/WvbwBQt4/image.png" alt="Image" style="border-radius: 15px;">
+</div>
+
+
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Click "Load unpacked"</div>
+          <div class="step-desc">Click the <strong>Load unpacked</strong> button that appeared. A file picker opens. Navigate to your <code>feather\</code> folder and click <strong>Select Folder</strong>.</div>
+
+<div class="img-slot">
+  <img src="https://i.ibb.co/LDh7SG3s/image.png" alt="Image" style="border-radius: 15px;">
+</div>
+
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <div class="step-title">Pin the extension</div>
+          <div class="step-desc">The Feather card appears on the extensions page. In the Chrome toolbar, click the 🧩 puzzle-piece icon and pin Feather so you can always reach the popup.</div>
+
+<div class="img-slot">
+  <img src="https://i.ibb.co/3yjndbf3/image.png" alt="Image" style="border-radius: 15px;">
+</div>
+
+
+
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">7</div>
+        <div class="step-body">
+          <div class="step-title">Open Discord and verify</div>
+          <div class="step-desc">Navigate to <a href="https://discord.com/app" target="_blank">discord.com/app</a>. Within a couple of seconds the Feather overlay indicator should appear in the <strong>bottom-right corner</strong> of the page showing <em>watching</em>. Click the toolbar icon to open the popup.</div>
+
+<div class="img-slot">
+  <img src="https://i.ibb.co/Kz7FhBbF/image.png" alt="Image" style="border-radius: 15px;">
+</div>
+
+        </div>
+      </div>
+    </div>
+    <h3>Reloading after edits</h3>
+    <p>Every time you change any file, you must: go to <code>chrome://extensions</code>, find the Feather card, click the <strong>↺ refresh icon</strong>, then reload the Discord tab. Chrome does not auto-reload unpacked extensions.</p>
+  </div>
+
+  <!-- MACOS -->
+  <div class="os-panel" id="os-mac">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Put all files in one folder</div>
+          <div class="step-desc">Create a permanent folder — e.g. <code>~/Documents/feather/</code>. Place all six files and the <code>icons/</code> subfolder inside. Don't move it after loading.</div>        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Add your credentials to background.js</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Open Chrome Extensions</div>
+          <div class="step-desc">Go to <code>chrome://extensions</code> in Chrome's address bar.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Enable Developer mode</div>
+          <div class="step-desc">Toggle <strong>Developer mode</strong> on in the top-right corner of the page.</div>
+
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Click "Load unpacked"</div>
+          <div class="step-desc">Click <strong>Load unpacked</strong>. In the Finder dialog navigate to <code>~/Documents/feather/</code> and click <strong>Open</strong>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">6</div>
+        <div class="step-body">
+          <div class="step-title">Pin and verify</div>
+          <div class="step-desc">Pin Feather from the 🧩 menu. Open <a href="https://discord.com/app" target="_blank">discord.com/app</a> — the overlay should appear bottom-right within a few seconds.</div>        </div>
+      </div>
+    </div>
+    <div class="callout tip">
+      <span class="callout-icon">💡</span>
+      <div class="callout-body"><strong>Quick reload shortcut</strong>On macOS you can hit <kbd>⌘ R</kbd> on the Discord tab after reloading the extension at <code>chrome://extensions</code>.</div>
+    </div>
+  </div>
+
+  <!-- LINUX -->
+  <div class="os-panel" id="os-linux">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <div class="step-title">Put all files in one directory</div>
+          <div class="step-desc">Pick a permanent path — e.g. <code>~/.local/share/feather/</code>. Copy all files and the <code>icons/</code> subdirectory there.</div>
+<pre><button class="copy-btn" onclick="cp(this)">copy</button>mkdir -p ~/.local/share/feather
+cp -r /path/to/downloaded/feather/* ~/.local/share/feather/</pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <div class="step-title">Add your credentials</div>
+          <div class="step-desc">Edit <code>background.js</code> with your favourite editor:</div>
+<pre><button class="copy-btn" onclick="cp(this)">copy</button>nano ~/.local/share/feather/background.js
+<span class="cm"># or: code, vim, gedit — whatever you prefer</span></pre>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <div class="step-title">Open Chrome Extensions</div>
+          <div class="step-desc">Launch Chrome or Chromium and go to <code>chrome://extensions</code>.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <div class="step-title">Enable Developer mode + Load unpacked</div>
+          <div class="step-desc">Toggle Developer mode, click <strong>Load unpacked</strong>, navigate to <code>~/.local/share/feather/</code>, click <strong>Open</strong>.</div>
+          <
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <div class="step-title">Open Discord and verify</div>
+          <div class="step-desc">Go to <a href="https://discord.com/app" target="_blank">discord.com/app</a>. The feather overlay should appear in the bottom-right corner.</div>
+        </div>
+      </div>
+    </div>
+    <div class="callout warn">
+      <span class="callout-icon">⚠️</span>
+      <div class="callout-body"><strong>Snap Chrome on Linux</strong>If Chrome was installed via Snap, it sandboxes filesystem access. If Load Unpacked fails to see your folder, move the extension to <code>~/snap/chromium/current/feather/</code> or install Chrome via the official <code>.deb</code> package instead.</div>
+    </div>
+  </div>
 </section>
 
-<!-- CONFIG -->
+<!-- ─────────────────────────── CONFIG ─────────────────────────── -->
 <section class="section" id="config">
-<div class="eyebrow">Setup</div>
-<h1>Configuration</h1>
-<p class="lead">
-Edit background.js and insert your keys.
-</p>
+  <div class="eyebrow">Setup</div>
+  <h1>Configuration</h1>
+  <p class="lead">Everything lives in four constants at the very top of <code>background.js</code>. Open the file, fill them in, save, reload the extension. That's it.</p>
 
-<pre>
-const DISCORD_WEBHOOK_URL = "";
-const SUPABASE_URL = "";
-const SUPABASE_ANON_KEY = "";
-const SUPABASE_TABLE = "feather_logs";
-</pre>
+  <pre><button class="copy-btn" onclick="cp(this)">copy</button><span class="cm">// ── background.js — top of file ──────────────────────────</span>
+
+<span class="kw">const</span> <span class="ck">DISCORD_WEBHOOK_URL</span> = <span class="cs">"https://discord.com/api/webhooks/YOUR_ID/YOUR_TOKEN"</span>;
+<span class="kw">const</span> <span class="ck">SUPABASE_URL</span>        = <span class="cs">"https://your-project-id.supabase.co"</span>;
+<span class="kw">const</span> <span class="ck">SUPABASE_ANON_KEY</span>   = <span class="cs">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."</span>;
+<span class="kw">const</span> <span class="ck">SUPABASE_TABLE</span>      = <span class="cs">"feather_logs"</span>; <span class="cm">// change if you renamed your table</span></pre>
+
+  <div class="callout warn">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-body"><strong>Reload required after every edit</strong>Go to <code>chrome://extensions</code>, click the <strong>↺</strong> icon on the Feather card, then reload your Discord tab. Chrome won't pick up changes automatically.</div>
+  </div>
+
+  <p>Both integrations are <strong>fully optional</strong>. If you leave a value as the placeholder string, that integration is silently skipped — no errors thrown. The popup's Overview tab shows live status dots so you can see at a glance what's configured.</p>
+
+  <h2>Chrome storage keys</h2>
+  <p>Feather stores runtime state in <code>chrome.storage.local</code>. You never manage these directly, but it's useful to know they exist:</p>
+  <div style="border:1px solid var(--line);border-radius:var(--radius);padding:0 18px;margin:16px 0;">
+    <div class="key-row"><span class="key-name">feather_enabled</span><span class="key-type">boolean</span><div class="key-desc">Whether detection is active. Defaults to <code>true</code> on first run.</div></div>
+    <div class="key-row"><span class="key-name">feather_count</span><span class="key-type">number</span><div class="key-desc">Running session message count. Persists until you clear it.</div></div>
+    <div class="key-row"><span class="key-name">feather_discord_open</span><span class="key-type">boolean</span><div class="key-desc">Whether a Discord tab with the content script is currently active.</div></div>
+    <div class="key-row"><span class="key-name">feather_recent</span><span class="key-type">array</span><div class="key-desc">Last 50 detected messages with full metadata. Shown in the Log tab.</div></div>
+    <div class="key-row"><span class="key-name">feather_integrations</span><span class="key-type">object</span><div class="key-desc"><code>{ webhook: boolean, supabase: boolean }</code> — written by background.js on startup so the popup can show status dots.</div></div>
+  </div>
+  <p>You can wipe all of this cleanly using the <strong>Full reset</strong> button in the popup Settings tab.</p>
+
+  <h2>manifest.json — why host_permissions matter</h2>
+  <p>Chrome Manifest V3 requires outbound <code>fetch()</code> targets to be explicitly listed in <code>host_permissions</code>. Without this, requests to Supabase and Discord are silently blocked from the service worker — no error, just nothing happens.</p>
+  <pre><button class="copy-btn" onclick="cp(this)">copy</button><span class="cs">"host_permissions"</span>: [
+  <span class="cs">"https://discord.com/*"</span>,
+  <span class="cs">"https://*.supabase.co/*"</span>
+]</pre>
+  <p>Both of these are already in the current <code>manifest.json</code>. Don't remove them.</p>
 </section>
 
-<!-- WEBHOOK -->
+<!-- ─────────────────────────── WEBHOOK ─────────────────────────── -->
 <section class="section" id="webhook">
-<div class="eyebrow">Integration</div>
-<h1>Webhook</h1>
-<p class="lead">
-Every detection sends a Discord webhook payload.
-</p>
+  <div class="eyebrow">Integration</div>
+  <h1>Webhook</h1>
+  <p class="lead">On every detected message, Feather fires a POST to a Discord webhook URL with the author's name, the channel, a message preview, and the running count.</p>
 
-<pre>
-Author
-Channel
-Message
-Time
-Running Count
-</pre>
+  <h2>Getting a webhook URL</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Open a server you manage</div>
+        <div class="step-desc">You need <strong>Manage Webhooks</strong> permission on the target channel. This can be any server and any channel — it doesn't have to be the same one you're monitoring. A private logging server works great.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Open channel settings</div>
+        <div class="step-desc">Click the ⚙️ gear icon next to the channel name → <strong>Integrations</strong> → <strong>Webhooks</strong> → <strong>New Webhook</strong>. Give it a name like "Feather".</div>
+
+<div class="img-slot">
+  <img 
+    src="https://i.ibb.co/dJKfN6H5/image.png" 
+    alt="Image" 
+    style="border-radius: 15px; max-width: 100%; height: auto;"
+  >
+</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Copy the Webhook URL</div>
+        <div class="step-desc">Click <strong>Copy Webhook URL</strong>. It looks like:<br><code>https://discord.com/api/webhooks/1234567890/abc123xyz...</code></div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-body">
+        <div class="step-title">Paste into background.js</div>
+        <div class="step-desc">Set <code>DISCORD_WEBHOOK_URL</code> to this value and reload the extension.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>What the webhook message looks like</h2>
+  <p>Here's a real example of what gets posted to your logging channel:</p>
+
+  <div class="discord-preview">
+    <div class="discord-preview-bar">
+      <div class="discord-dot"></div>
+      <div class="discord-dot y"></div>
+      <div class="discord-dot g"></div>
+      <span style="margin-left:6px;"># feather-logs</span>
+    </div>
+    <div class="discord-msg-area">
+      <div class="discord-msg">
+        <div class="discord-avatar">
+  <img 
+    src="https://static.vecteezy.com/system/resources/previews/006/892/625/non_2x/discord-logo-icon-editorial-free-vector.jpg" 
+    alt="Discord Logo" 
+    style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; display: block;"
+  >
+</div>
+        <div class="discord-msg-body">
+          <div class="discord-msg-header">
+            <span class="discord-msg-name">feather webhook</span>
+            <span class="discord-msg-time">Today at 14:32</span>
+          </div>
+          <div class="discord-msg-text">
+            🔔 <strong>New Discord Message</strong> · 14:32:07<br>
+            <strong>Author:</strong> username123<br>
+            <strong>Channel:</strong> general<br>
+            <strong>Message:</strong> hey has anyone seen the new update yet<br>
+            <strong>Total count:</strong> 7
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p>The message content is capped at <strong>200 characters</strong> before sending. Longer messages are truncated with no indication — keep that in mind if you need full content, use Supabase instead.</p>
+
+  <h2>Testing your webhook</h2>
+  <p>You can test the URL is valid before loading the extension by sending a quick <code>curl</code> from your terminal:</p>
+  <pre><button class="copy-btn" onclick="cp(this)">copy</button>curl -X POST YOUR_WEBHOOK_URL \
+  -H "Content-Type: application/json" \
+  -d '{"content": "Feather test 🪶"}'</pre>
+  <p>If your logging channel gets a message, the URL is correct.</p>
 </section>
 
-<!-- SUPABASE -->
+<!-- ─────────────────────────── SUPABASE ─────────────────────────── -->
 <section class="section" id="supabase">
-<div class="eyebrow">Integration</div>
-<h1>Supabase</h1>
-<p class="lead">
-Insert every detected message into a database row.
-</p>
+  <div class="eyebrow">Integration</div>
+  <h1>Supabase</h1>
+  <p class="lead">Every detected message is inserted as a row into your Supabase database — giving you a permanent, queryable log of everything Feather has ever seen.</p>
 
-<pre>
-create table feather_logs (
- id bigint generated always as identity primary key,
- author text,
- content text,
- channel text,
- count integer,
- timestamp timestamptz default now()
+  <div class="callout warn">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-body"><strong>manifest.json must list Supabase in host_permissions</strong>Chrome MV3 silently blocks outbound fetches to unlisted hosts from service workers. The current <code>manifest.json</code> already includes <code>https://*.supabase.co/*</code> — do not remove it.</div>
+  </div>
+
+  <h2>Step 1 — Create a project</h2>
+  <p>Go to <a href="https://supabase.com" target="_blank">supabase.com</a>, sign in, and click <strong>New project</strong>. Give it a name (e.g. <code>feather</code>), set a database password, pick a region close to you, and wait about 60 seconds for it to provision. The free tier is more than enough — it gives you 500MB and unlimited API calls.</p>
+
+  <h2>Step 2 — Create the table</h2>
+  <p>In your project sidebar, click <strong>SQL Editor</strong>. Paste this entire block and click <strong>Run</strong>:</p>
+  <pre><button class="copy-btn" onclick="cp(this)">copy</button><span class="kw">create table</span> feather_logs (
+  id         bigint <span class="kw">generated always as identity primary key</span>,
+  author     text,
+  content    text,
+  channel    text,
+  count      integer,
+  timestamp  timestamptz <span class="kw">default</span> now()
 );
-</pre>
+
+<span class="cm">-- Enable row-level security (required to use the anon key)</span>
+<span class="kw">alter table</span> feather_logs <span class="kw">enable row level security</span>;
+
+<span class="cm">-- Allow the anon key to INSERT rows</span>
+<span class="kw">create policy</span> <span class="cs">"Allow anon insert"</span>
+  <span class="kw">on</span> feather_logs <span class="kw">for insert to</span> anon
+  <span class="kw">with check</span> (<span class="kw">true</span>);
+
+<span class="cm">-- Allow the anon key to SELECT rows</span>
+<span class="kw">create policy</span> <span class="cs">"Allow anon select"</span>
+  <span class="kw">on</span> feather_logs <span class="kw">for select to</span> anon
+  <span class="kw">using</span> (<span class="kw">true</span>);</pre>
+
+  <div class="callout note">
+    <span class="callout-icon">ℹ️</span>
+    <div class="callout-body"><strong>Why the RLS policies?</strong>Supabase enables Row Level Security by default. Without the insert policy, the anon key (used by the extension) is denied permission to write rows — you'd get a 403 with no helpful error message.</div>
+  </div>
+
+  
+
+  <h2>Step 3 — Get your credentials</h2>
+  <p>In your project sidebar go to <strong>Project Settings → API</strong>. You need two values:</p>
+  <table class="tbl">
+    <thead><tr><th>Field</th><th>Where</th><th>Looks like</th></tr></thead>
+    <tbody>
+      <tr><td>Project URL</td><td>Settings → API → Project URL</td><td><code>https://abcdefgh.supabase.co</code></td></tr>
+      <tr><td>anon / public key</td><td>Settings → API → Project API keys</td><td><code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code> (long JWT)</td></tr>
+    </tbody>
+  </table>
+  
+
+  <h2>Step 4 — Paste into background.js</h2>
+  <pre><button class="copy-btn" onclick="cp(this)">copy</button><span class="kw">const</span> <span class="ck">SUPABASE_URL</span>      = <span class="cs">"https://abcdefgh.supabase.co"</span>;
+<span class="kw">const</span> <span class="ck">SUPABASE_ANON_KEY</span> = <span class="cs">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."</span>;
+<span class="kw">const</span> <span class="ck">SUPABASE_TABLE</span>    = <span class="cs">"feather_logs"</span>;</pre>
+  <p>Reload the extension at <code>chrome://extensions</code> → ↺, then reload Discord.</p>
+
+  <h2>Step 5 — Verify it's working</h2>
+  <p>Trigger a detection (send a message or have someone else send one in the channel you're watching). Then go to <strong>Table Editor → feather_logs</strong> in Supabase. A new row should appear within one second.</p>
+  
+  <h2>Useful queries</h2>
+  <p>Run these in the Supabase SQL Editor to explore your data:</p>
+  <pre><button class="copy-btn" onclick="cp(this)">copy</button><span class="cm">-- All messages, newest first</span>
+<span class="kw">select</span> timestamp, author, channel, content
+<span class="kw">from</span> feather_logs
+<span class="kw">order by</span> timestamp <span class="kw">desc</span>;
+
+<span class="cm">-- Messages per author (leaderboard)</span>
+<span class="kw">select</span> author, <span class="kw">count</span>(*) <span class="kw">as</span> total
+<span class="kw">from</span> feather_logs
+<span class="kw">group by</span> author
+<span class="kw">order by</span> total <span class="kw">desc</span>;
+
+<span class="cm">-- Messages per channel</span>
+<span class="kw">select</span> channel, <span class="kw">count</span>(*) <span class="kw">as</span> total
+<span class="kw">from</span> feather_logs
+<span class="kw">group by</span> channel
+<span class="kw">order by</span> total <span class="kw">desc</span>;
+
+<span class="cm">-- Last 24 hours only</span>
+<span class="kw">select</span> * <span class="kw">from</span> feather_logs
+<span class="kw">where</span> timestamp &gt; now() - interval <span class="cs">'24 hours'</span>
+<span class="kw">order by</span> timestamp <span class="kw">desc</span>;
+
+<span class="cm">-- Search for a specific author</span>
+<span class="kw">select</span> * <span class="kw">from</span> feather_logs
+<span class="kw">where</span> author <span class="kw">ilike</span> <span class="cs">'%username%'</span>
+<span class="kw">order by</span> timestamp <span class="kw">desc</span>;</pre>
 </section>
 
-<!-- POPUP -->
+<!-- ─────────────────────────── POPUP ─────────────────────────── -->
 <section class="section" id="popup">
-<div class="eyebrow">Reference</div>
-<h1>Popup UI</h1>
-<p class="lead">
-Toolbar popup with stats, logs, and controls.
-</p>
+  <div class="eyebrow">Reference</div>
+  <h1>Popup UI</h1>
+  <p class="lead">Click the Feather icon in the Chrome toolbar to open the popup. It has three tabs — Overview, Log, and Settings — all updating live as messages come in.</p>
 
-<div class="grid">
-<div class="card">
-<strong>Status</strong>
-<span>Shows enabled / paused state.</span>
-</div>
+  <h2>Overview tab</h2>
+  <table class="tbl">
+    <thead><tr><th>Element</th><th>What it shows / does</th></tr></thead>
+    <tbody>
+      <tr><td>Status dot (header)</td><td>Green pulsing = live and detecting. Grey = paused.</td></tr>
+      <tr><td>Count number</td><td>Total messages detected this session. Turns green and bumps when a new message is counted.</td></tr>
+      <tr><td>Active toggle</td><td>Enable or pause detection. Change syncs to the Discord overlay within milliseconds.</td></tr>
+      <tr><td>Clear button</td><td>Resets count to 0 and clears the deduplication ID set.</td></tr>
+      <tr><td>Session stat</td><td>Same as the count number.</td></tr>
+      <tr><td>Authors stat</td><td>Number of unique authors seen since last clear.</td></tr>
+      <tr><td>Channel stat</td><td>Current channel name, or a count if messages came from multiple channels.</td></tr>
+      <tr><td>Webhook badge</td><td><span class="pill green">● configured</span> if <code>DISCORD_WEBHOOK_URL</code> is set. <span class="pill grey">not set</span> otherwise.</td></tr>
+      <tr><td>Database dot</td><td>Green = Supabase is configured and the integration status was written on startup.</td></tr>
+      <tr><td>Discord pill (footer)</td><td>Green dot = a Discord tab with the content script is active. Red = not found — check that Discord is open in Chrome.</td></tr>
+    </tbody>
+  </table>
 
-<div class="card">
-<strong>Count</strong>
-<span>Total messages this session.</span>
-</div>
+  <h2>Log tab</h2>
+  <p>Shows the last 50 detected messages in reverse chronological order, pulled from <code>feather_recent</code> in local storage. Each entry shows:</p>
+  <ul style="margin:10px 0 16px 20px;font-size:14px;color:#555;line-height:2;">
+    <li><strong>Author</strong> — in green monospace</li>
+    <li><strong>Channel</strong> — as a blue pill prefixed with <code>#</code></li>
+    <li><strong>Time</strong> — in HH:MM format</li>
+    <li><strong>Message preview</strong> — up to 200 characters of content</li>
+  </ul>
+  <p><strong>Clear all</strong> wipes the local log. This does <em>not</em> delete rows from Supabase — those are permanent until you delete them manually.</p>
 
-<div class="card">
-<strong>Recent Logs</strong>
-<span>Last 50 detections.</span>
-</div>
-
-<div class="card">
-<strong>Reset</strong>
-<span>Clear all local storage.</span>
-</div>
-</div>
+  <h2>Settings tab</h2>
+  <table class="tbl">
+    <thead><tr><th>Item</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>Version</td><td>Current extension version number.</td></tr>
+      <tr><td>Scope</td><td>Always <code>all channels</code> — Feather watches whichever channel is open.</td></tr>
+      <tr><td>Keyboard toggle</td><td>Reminds you the shortcut is <kbd>Alt Q</kbd>.</td></tr>
+      <tr><td>Webhook status</td><td>Whether <code>DISCORD_WEBHOOK_URL</code> is configured in background.js.</td></tr>
+      <tr><td>Supabase status</td><td>Whether <code>SUPABASE_URL</code> is configured.</td></tr>
+      <tr><td>Export log as JSON</td><td>Downloads <code>feather-export-{timestamp}.json</code> containing the full local message log and session count.</td></tr>
+      <tr><td>Full reset</td><td>Clears all <code>chrome.storage.local</code> data and resets the content script count. Requires confirmation. Does not touch Supabase.</td></tr>
+    </tbody>
+  </table>
 </section>
 
-<!-- LOGIC -->
+<!-- ─────────────────────────── LOGIC ─────────────────────────── -->
 <section class="section" id="logic">
-<div class="eyebrow">Reference</div>
-<h1>Detection Logic</h1>
-<p class="lead">
-Feather uses DOM detection with deduplication.
-</p>
+  <div class="eyebrow">Reference</div>
+  <h1>Detection Logic</h1>
+  <p class="lead">How Feather identifies real messages, suppresses false triggers, deduplicates, and extracts author and channel metadata — all without touching the Discord API.</p>
 
-<pre>
-1. Find new message node
-2. Ignore history burst inserts
-3. Ignore duplicates
-4. Extract author/channel/content
-5. Trigger integrations
-</pre>
+  <h2>Identifying a message node</h2>
+  <p>Feather runs a <code>MutationObserver</code> on <code>document.body</code> with <code>{ childList: true, subtree: true }</code>. Every added node is checked against three criteria in order:</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">data-list-item-id starts with "chat-messages-"</div>
+        <div class="step-desc">Discord stamps every message <code>&lt;li&gt;</code> element with this attribute. It's the primary signal and the most reliable.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Contains a child with that attribute</div>
+        <div class="step-desc">Covers wrapper divs Discord occasionally adds around the <code>&lt;li&gt;</code> in certain UI states.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Contains a messageContent_ or cozyMessage class</div>
+        <div class="step-desc">Class-based fallback for older Discord versions or edge cases. Less precise but still reliable.</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Channel switch suppression</h2>
+  <p>When you switch channels, Discord bulk-inserts ~50 historical messages into the DOM. Without suppression, each one would trigger a detection. Feather uses two independent layers:</p>
+  <table class="tbl">
+    <thead><tr><th>Layer</th><th>Mechanism</th><th>Cooldown</th></tr></thead>
+    <tbody>
+      <tr><td>URL poller</td><td>Checks <code>location.href</code> every 150ms. Any URL change immediately arms a cooldown.</td><td>2000ms</td></tr>
+      <tr><td>Burst detector</td><td>Counts message nodes per MutationObserver callback. 3+ nodes in a single callback = history dump → suppressed + cooldown re-armed.</td><td>2000ms</td></tr>
+    </tbody>
+  </table>
+  <p>These run independently. A slow channel switch is caught by the URL poller. A fast bulk insert is caught by the burst detector. Initial page load is suppressed by both (cooldown fires on script init).</p>
+  <p>If you're in an extremely active channel and legitimate messages arrive in bursts of 3+, you can increase <code>BURST_LIMIT</code> in <code>content.js</code>:</p>
+  <pre><button class="copy-btn" onclick="cp(this)">copy</button><span class="cm">// content.js — near the top</span>
+<span class="kw">const</span> <span class="ck">BURST_LIMIT</span>  = <span class="cv">5</span>;    <span class="cm">// raise if false suppressions happen</span>
+<span class="kw">const</span> <span class="ck">NAV_COOLDOWN</span> = <span class="cv">2000</span>; <span class="cm">// ms to ignore after URL change</span></pre>
+
+  <h2>Deduplication</h2>
+  <p>Discord uses optimistic rendering — when you send a message it appears in the DOM immediately (as a "local" message), then gets replaced with the server-confirmed version. Without dedup, this counts as two messages.</p>
+  <p>Feather maintains a <code>Set</code> of seen <code>data-list-item-id</code> values. If an ID is already in the set, the node is skipped. Nodes with <code>data-is-local-message="true"</code> are also skipped entirely. The set is capped at 500 entries (oldest evicted first) and cleared on channel switch.</p>
+
+  <h2>Author extraction</h2>
+  <p>Discord groups consecutive messages from the same author — only the first in a group shows the username header. Feather handles this by:</p>
+  <ol style="margin:10px 0 16px 20px;font-size:14px;color:#555;line-height:2;">
+    <li>Looking for <code>[class*="username_"]</code> within the message node itself</li>
+    <li>If not found (grouped message), walking backwards through previous messages in the scroller to find the most recent username header above it</li>
+    <li>Falling back to <code>"unknown"</code> if neither works</li>
+  </ol>
+
+  <h2>Channel name extraction</h2>
+  <p>The current channel name is read from Discord's page header using:</p>
+  <pre><span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="cs">'h3[class*="title_"]'</span>)
+  || <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="cs">'[class*="channelName_"]'</span>)
+  || <span class="fn">document</span>.<span class="fn">querySelector</span>(<span class="cs">'h1[class*="title_"]'</span>)</pre>
+  <p>This reads whatever channel is currently visible — if you're watching multiple servers simultaneously in separate tabs, each tab tracks its own channel independently.</p>
 </section>
 
-<!-- TROUBLE -->
+<!-- ─────────────────────────── SHORTCUTS ─────────────────────────── -->
+<section class="section" id="shortcuts">
+  <div class="eyebrow">Reference</div>
+  <h1>Shortcuts</h1>
+  <p class="lead">Feather has one keyboard shortcut. It works anywhere on discord.com as long as the Discord tab is focused — you don't need to open the popup.</p>
+
+  <div style="border:1px solid var(--line);border-radius:var(--radius);padding:0 20px;margin:28px 0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 0;border-bottom:1px solid var(--line);">
+      <div>
+        <div style="font-size:14.5px;font-weight:600;color:#000;margin-bottom:4px;">Toggle detection on / off</div>
+        <div style="font-size:13px;color:#666;">Instantly pauses or resumes the MutationObserver. State is saved to storage and persists across reloads.</div>
+      </div>
+      <div style="display:flex;gap:5px;flex-shrink:0;margin-left:24px;">
+        <kbd>Alt</kbd><kbd>Q</kbd>
+      </div>
+    </div>
+    <div style="padding:16px 0;font-size:13px;color:#888;">
+      More shortcuts can be added in <code>content.js</code> — look for the <code>keydown</code> event listener near the bottom of the file.
+    </div>
+  </div>
+
+  <div class="callout tip">
+    <span class="callout-icon">💡</span>
+    <div class="callout-body"><strong>The overlay reflects the state immediately</strong>When you press <kbd>Alt Q</kbd>, the overlay indicator switches between <em>watching</em> and <em>paused</em> with a smooth transition. No need to open the popup to confirm the state changed.</div>
+  </div>
+</section>
+
+<!-- ─────────────────────────── TROUBLE ─────────────────────────── -->
 <section class="section" id="trouble">
-<div class="eyebrow">Help</div>
-<h1>Troubleshooting</h1>
-<p class="lead">
-Common fixes.
-</p>
+  <div class="eyebrow">Help</div>
+  <h1>Troubleshooting</h1>
+  <p class="lead">Most issues come down to one of five things. Work through each checklist below before giving up.</p>
 
-<pre>
-No overlay?
-Reload Discord.
+  <h2>Overlay doesn't appear on Discord</h2>
+  <div class="callout danger">
+    <span class="callout-icon">🔴</span>
+    <div class="callout-body">
+      <strong>Steps to fix</strong>
+      1. Hard reload Discord: <kbd>Ctrl Shift R</kbd> (Windows/Linux) or <kbd>⌘ Shift R</kbd> (Mac).<br>
+      2. Check that Feather is enabled at <code>chrome://extensions</code>.<br>
+      3. Open the Discord tab's DevTools (F12) → Console tab → look for any Feather errors.<br>
+      4. Make sure you're on <code>discord.com</code> not the desktop app — content scripts only inject into the browser.
+    </div>
+  </div>
 
-Webhook dead?
-Check URL + permissions.
+  <h2>Popup toggle / reset does nothing</h2>
+  <div class="callout danger">
+    <span class="callout-icon">🔴</span>
+    <div class="callout-body">
+      <strong>Steps to fix</strong>
+      1. Go to <code>chrome://extensions</code> → Feather → click the <strong>service worker</strong> link to open background DevTools.<br>
+      2. Check the Console tab for any errors. A missing <code>discordTabs</code> variable or unhandled rejection is the usual cause.<br>
+      3. Click ↺ to reload the extension, then reload the Discord tab — this re-runs <code>FEATHER_CHECKIN</code> and re-registers the tab in the relay.<br>
+      4. If it still doesn't work, open the Discord tab's DevTools Console and look for message-passing errors.
+    </div>
+  </div>
 
-No rows?
-Check Supabase key + RLS.
-</pre>
+  <h2>Webhook messages not arriving</h2>
+  <div class="callout danger">
+    <span class="callout-icon">🔴</span>
+    <div class="callout-body">
+      <strong>Checklist</strong>
+      ☐ <code>DISCORD_WEBHOOK_URL</code> is set in <code>background.js</code> (not the placeholder).<br>
+      ☐ <code>manifest.json</code> includes <code>"https://discord.com/*"</code> in <code>host_permissions</code>.<br>
+      ☐ Background DevTools Console shows no <code>[Feather] Webhook failed:</code> error.<br>
+      ☐ Test the URL directly with <code>curl</code> (see the Webhook page).
+    </div>
+  </div>
+
+  <h2>Supabase rows not appearing</h2>
+  <div class="callout danger">
+    <span class="callout-icon">🔴</span>
+    <div class="callout-body">
+      <strong>Checklist</strong>
+      ☐ <code>SUPABASE_URL</code> and <code>SUPABASE_ANON_KEY</code> are correct (no trailing slashes).<br>
+      ☐ <code>manifest.json</code> includes <code>"https://*.supabase.co/*"</code> in <code>host_permissions</code>.<br>
+      ☐ The <code>feather_logs</code> table exists — re-run the SQL from the Supabase setup page.<br>
+      ☐ Both RLS policies exist (<em>Allow anon insert</em> and <em>Allow anon select</em>).<br>
+      ☐ Background DevTools shows no <code>[Feather] Supabase log failed:</code> error.
+    </div>
+  </div>
+
+  <h2>Channel switches still trigger false detections</h2>
+  <div class="callout warn">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-body">
+      <strong>Increase the burst limit or cooldown</strong>
+      Make sure you're running the latest <code>content.js</code> — earlier versions had no suppression at all. If you still see false triggers, open <code>content.js</code> and increase <code>BURST_LIMIT</code> from 3 to 5, or increase <code>NAV_COOLDOWN</code> from 2000 to 3000. Reload the extension and Discord.
+    </div>
+  </div>
+
+  <h2>Messages being double-counted</h2>
+  <div class="callout warn">
+    <span class="callout-icon">⚠️</span>
+    <div class="callout-body">
+      <strong>Check for duplicate extension loads</strong>
+      Go to <code>chrome://extensions</code> — if Feather appears twice, you've loaded it from two different folders. Remove the duplicate. The dedup <code>Set</code> is per-script-instance, so two content scripts in the same tab will each count independently.
+    </div>
+  </div>
+
+  <h2>Opening the background service worker DevTools</h2>
+  <p>Many issues are diagnosed by reading the background script's console. Here's how to open it:</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-body">
+        <div class="step-title">Go to chrome://extensions</div>
+        <div class="step-desc">Find the Feather card.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-body">
+        <div class="step-title">Click "service worker"</div>
+        <div class="step-desc">There's a blue <strong>service worker</strong> link under the extension name. Click it — this opens a dedicated DevTools window for the background script.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-body">
+        <div class="step-title">Check the Console tab</div>
+        <div class="step-desc">Any <code>[Feather]</code> prefixed error messages appear here. Copy the full error and check which function threw it.</div>
+      </div>
+    </div>
+  </div>
 </section>
 
 </main>
 </div>
 
 <script>
-function showSection(id){
-document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-
-document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-document.querySelector(`[data-tab="${id}"]`).classList.add('active');
-
-window.scrollTo({top:0,behavior:'smooth'});
-toggleMenu(false);
+function nav(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const btn = document.querySelector(`[data-tab="${id}"]`);
+  if (btn) btn.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  toggleSidebar(false);
 }
 
-function toggleMenu(force){
-const side=document.getElementById('sidebar');
-const over=document.getElementById('overlay');
-
-const open = force === undefined
-? !side.classList.contains('open')
-: force;
-
-side.classList.toggle('open',open);
-over.classList.toggle('show',open);
+function toggleSidebar(force) {
+  const side = document.getElementById('sidebar');
+  const over  = document.getElementById('overlay');
+  const open  = force !== undefined ? force : !side.classList.contains('open');
+  side.classList.toggle('open', open);
+  over.classList.toggle('show', open);
+  document.body.style.overflow = open ? 'hidden' : '';
 }
+
+function showOs(os) {
+  document.querySelectorAll('.os-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.os-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector(`[onclick="showOs('${os}')"]`).classList.add('active');
+  document.getElementById('os-' + os).classList.add('active');
+}
+
+function cp(btn) {
+  const pre = btn.closest('pre');
+  const text = pre.innerText.replace(/^copy\n|^copied\n/,'').trim();
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = 'copied'; btn.classList.add('ok');
+    setTimeout(() => { btn.textContent = 'copy'; btn.classList.remove('ok'); }, 2000);
+  });
+}
+
+window.addEventListener('scroll', () => {
+  const d = document.documentElement;
+  const pct = d.scrollTop / (d.scrollHeight - d.clientHeight) * 100;
+  document.getElementById('prog').style.width = (isNaN(pct) ? 0 : pct) + '%';
+});
 </script>
-
 </body>
 </html>
